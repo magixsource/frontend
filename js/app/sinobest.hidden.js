@@ -14,7 +14,7 @@
         $input.settings = settings;
 
         /**
-         * Get text value
+         * Get value
          * @return  object
          */
         $input.getValue = function () {
@@ -22,7 +22,7 @@
         };
 
         /**
-         * Set text value
+         * Set value
          * @param value new value
          * @return object
          */
@@ -30,7 +30,7 @@
             return $input.val(value);
         };
         /**
-         * Get text state
+         * Get state
          * @return object
          */
         $input.getState = function () {
@@ -38,7 +38,7 @@
         };
 
         /**
-         * Set text new state
+         * Set new state
          * @param stateJson state json
          * @return  object
          */
@@ -59,14 +59,14 @@
         };
 
         /**
-         * Reload text
+         * Reload hidden
          * @return object
          */
         $input.reload = function () {
             return render();
         };
         /**
-         * Text show or hide
+         * show or hide
          * @param show show or hide
          * @return object
          */
@@ -79,7 +79,7 @@
             return $input;
         };
         /**
-         * Destory text
+         * Destory
          */
         $input.destory = function () {
             return  $input.remove();
@@ -100,7 +100,7 @@
         }
 
         /**
-         * Get input attributes
+         * Get hidden attributes
          */
         function getAttributes() {
             var attributes = "{";
