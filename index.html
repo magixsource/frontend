@@ -75,19 +75,14 @@
             alert('aa');
         }});
 
-        var optionData = [
+        var optionData =
             {
-                "key":"a",
-                "value":"a"
-            },
-            {
-                "key":"b",
-                "value":"b"
-            }
-        ];
+                "a":"a",
+                "b":"b"
+            };
 
 
-        var d = $('#d').sbselect({value:"5", onChange:function () {
+        var d = $('#d').sbselect({value:"5",data:optionData, onChange:function () {
 
         }});
 

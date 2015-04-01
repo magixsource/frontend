@@ -109,9 +109,9 @@
                 // clear all option
                 $select.find("option").remove();
                 // data reload
-                for (idx in $select.settings.data) {
-                    $select.append('<option value="' + $select.settings.data[idx].value + '">' + $select.settings.data[idx].key + '</option>');
-                }
+                $.each($select.settings.data, function (k, v) {
+                    $select.append('<option value="' + v + '">' + k + '</option>');
+                });
             }
             return $select;
         }
