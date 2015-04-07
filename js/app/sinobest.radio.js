@@ -23,6 +23,10 @@
             return $radio.filter('[value=' + v + ']').prop('checked', true);
         };
 
+        $radio.getDetail = function(){
+
+        };
+
         $radio.getState = function () {
         };
         $radio.setState = function () {
