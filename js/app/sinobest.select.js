@@ -32,6 +32,14 @@
         $select.setValue = function (value) {
             return $select.val(value);
         };
+
+        /**
+         * Get selected text
+         * @return {*}
+         */
+        $select.getDetail = function(){
+           return $select.find('option:selected').text();
+        };
         /**
          * Get state
          * @return object
