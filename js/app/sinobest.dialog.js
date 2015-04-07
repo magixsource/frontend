@@ -3,60 +3,139 @@
         sbdialog:function (options) {
             var defaults = {
                 containerId:null,
-                className:"sinobest-dialog", //CSS类名
+                content:null, // 设置content之后，会覆盖container的内容
+                className:"sinobest-dialog", //CSS类名(Unuse)
                 dialogType:"dialog",
                 text:"",
+                width:null, //(Unuse)
+                height:null, //(Unuse)
+                zIndex:1024, //影响全局
+                title:null, //(Unuse)
+                // 自定义按钮
+                okValue:"确定",
+                cancelValue:"取消",
                 onClick:function () {
                 },
                 onCancel:null
             };
             var settings = $.extend({}, defaults, options || {});
 
+            var instance = null;
+
+            this.getValue = function () {
+//                if (settings.dialogType == 'modal' || settings.dialogType == 'dialog') {
+//                    return $('#' + settings.containerId).html();
+//                } else {
+//                    return settings.text;
+//                }
+            };
+            this.setValue = function (v) {
+//                if (settings.dialogType == 'modal' || settings.dialogType == 'dialog') {
+//                    settings.content = v;
+//                } else {
+//                    settings.text = v;
+//                }
+//                this.reload();
+            };
+
+            this.getState = function () {
+                return $.extend({}, getAttributes(), getSettings());
+            };
+
+            this.setState = function (stateJson) {
+
+            };
+
+            this.getDom = function () {
+                if (settings.dialogType == 'modal' || settings.dialogType == 'dialog') {
+                    return document.getElementById(settings.containerId);
+                }
+            };
+
+            this.reload = function () {
+                instance.close();
+                render();
+            };
+            this.display = function (b) {
+                if (b) {
+                    // open
+                    if (!instance.open) {
+                        instance.show();
+                    }
+                } else {
+                    instance.close();
+                }
+            };
+
+            this.destory = function () {
+                instance.remove();
+            };
+
+            function getAttributes() {
+
+            }
+
+            function getSettings() {
+                return settings;
+            }
+
             function render() {
                 if (settings.dialogType == 'alert') {
                     //$.dialog({content:settings.text});
-                    var d = dialog({
+                    instance = dialog({
                         content:settings.text,
                         cancel:false,
-                        okValue:'确定',
+                        okValue:settings.okValue,
                         ok:settings.onClick
                     });
-                    d.show();
+                    instance.show();
                 } else if (settings.dialogType == 'confirm') {
-                    var d = dialog({
+                    instance = dialog({
                         content:settings.text,
-                        okValue:'确定',
+                        okValue:settings.okValue,
                         ok:settings.onClick,
-                        cancelValue:'取消',
+                        cancelValue:settings.cancelValue,
                         cancel:settings.onCancel
                     });
-                    d.show();
+                    instance.show();
                 } else if (settings.dialogType == 'message') {
-                    var d = dialog({
+                    instance = dialog({
                         content:settings.text
                     });
-                    d.show();
+                    instance.show();
                     if (settings.autoClose) {
                         setTimeout(function () {
-                            d.close().remove();
+                            instance.close().remove();
                         }, settings.autoClose * 1000);
                     }
 
                 } else if (settings.dialogType == 'modal') {
-                    var d = dialog({
-                        title:'模态窗',
-                        width:400,
-                        content:$("#" + settings.containerId).html()
+                    var content = null;
+                    if (settings.content) {
+                        content = settings.content;
+                    } else {
+                        content = $("#" + settings.containerId).html();
+                    }
+
+                    instance = dialog({
+                        title:settings.title,
+                        content:content
                     });
-                    d.showModal();
+                    instance.showModal();
                 } else {
                     // handle as dialog
-                    var d = dialog({
-                        title:'对话框',
-                        width:400,
-                        content:$("#" + settings.containerId).html()
+                    var content = null;
+                    if (settings.content) {
+                        content = settings.content;
+                    } else {
+                        content = $("#" + settings.containerId).html();
+                    }
+
+                    instance = dialog({
+                        title:settings.title,
+                        content:content
                     });
-                    d.show();
+                    instance.show();
                 }
             }
 
@@ -66,4 +145,3 @@
 
     });
 })(jQuery);
-
