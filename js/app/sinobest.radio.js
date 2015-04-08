@@ -23,8 +23,8 @@
             return $radio.filter('[value=' + v + ']').prop('checked', true);
         };
 
-        $radio.getDetail = function(){
-
+        $radio.getDetail = function () {
+            return $radio.filter(':checked').next("label").text();
         };
 
         $radio.getState = function () {
@@ -59,6 +59,18 @@
                 horizontalRadio();
             }
 
+            if (settings.readonly) {
+                $radio.attr('readonly', settings.readonly);
+            }
+            if (settings.required) {
+                $radio.attr('required', settings.required);
+            }
+            if (settings.value) {
+                // checked
+                $radio.prop('checked', false);//全非选
+                $radio.filter('[value=' + settings.value + ']').prop('checked', true);
+            }
+
         }
 
         function tableRadio() {
@@ -70,11 +82,11 @@
         }
 
         function horizontalRadio() {
-
+            $radio.wrapAll("<ul class='sinobest-ul'>").wrap('<li>').addClass('sinobest-v-li').each(function () {
+                $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
+            });
         }
 
-        return this.each(function () {
-            render();
-        });
+        render();
     };
 })(jQuery);
