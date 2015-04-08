@@ -15,7 +15,7 @@
         $input.settings = settings;
 
         /**
-         * Get text value
+         * Get value
          * @return  object
          */
         $input.getValue = function () {
@@ -23,7 +23,7 @@
         };
 
         /**
-         * Set text value
+         * Set value
          * @param value new value
          * @return object
          */
@@ -31,20 +31,19 @@
             return $input.val(value);
         };
         /**
-         * Get text state
+         * Get state
          * @return object
          */
         $input.getState = function () {
-            return $.extend({}, getAttributes(), getSettings());
+            return $.extend({}, getAttributes());
         };
 
         /**
-         * Set text new state
+         * Set new state
          * @param stateJson state json
          * @return  object
          */
         $input.setState = function (stateJson) {
-            // 这里的State除了DOM属性之外，其他的部分较为模糊，具体指明不清晰，无法设置
             $.each(stateJson, function (k, v) {
                 $input.attr(k, v);
             });
@@ -60,14 +59,14 @@
         };
 
         /**
-         * Reload text
+         * Reload
          * @return object
          */
         $input.reload = function () {
             return render();
         };
         /**
-         * Text show or hide
+         * show or hide
          * @param show show or hide
          * @return object
          */
@@ -105,7 +104,7 @@
         }
 
         /**
-         * Get input attributes
+         * Get attributes
          */
         function getAttributes() {
             var attributes = "{";
