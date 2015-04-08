@@ -34,7 +34,7 @@
          * @return object
          */
         $input.getState = function () {
-            return $.extend({}, getAttributes(), getSettings());
+            return $.extend({}, getAttributes());
         };
 
         /**
@@ -43,7 +43,6 @@
          * @return  object
          */
         $input.setState = function (stateJson) {
-            // 这里的State除了DOM属性之外，其他的部分较为模糊，具体指明不清晰，无法设置
             $.each(stateJson, function (k, v) {
                 $input.attr(k, v);
             });
@@ -71,12 +70,13 @@
          * @return object
          */
         $input.display = function (show) {
-            if (show) {
-                $input.show();
-            } else {
-                $input.hide();
-            }
-            return $input;
+            // hidden无意义
+//            if (show) {
+//                $input.show();
+//            } else {
+//                $input.hide();
+//            }
+//            return $input;
         };
         /**
          * Destory
