@@ -4,7 +4,7 @@
 (function ($) {
     var defaults = {
         className:"sinobest-select", //CSS类名
-        require:false, // 是否必录
+        required:false, // 是否必录
         readonly:false,
         value:"",
         data:null,
@@ -37,8 +37,8 @@
          * Get selected text
          * @return {*}
          */
-        $select.getDetail = function(){
-           return $select.find('option:selected').text();
+        $select.getDetail = function () {
+            return $select.find('option:selected').text();
         };
         /**
          * Get state
@@ -101,8 +101,8 @@
          */
         function render() {
             $select.addClass($select.settings.className);
-            if ($select.settings.require) {
-                $select.attr('require', $select.settings.require);
+            if ($select.settings.required) {
+                $select.attr('required', $select.settings.required);
             }
             if ($select.settings.readonly) {
                 $select.attr('readonly', 'readonly');
