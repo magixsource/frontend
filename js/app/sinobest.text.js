@@ -4,7 +4,7 @@
 (function ($) {
     var defaults = {
         className:"sinobest-text", //CSS类名
-        require:false, // 是否必录
+        required:false, // 是否必录
         placeholder:"",
         readonly:false,
         value:""
@@ -92,8 +92,8 @@
          */
         function render() {
             $input.addClass($input.settings.className);
-            if ($input.settings.require) {
-                $input.attr('require', $input.settings.require);
+            if ($input.settings.required) {
+                $input.attr('required', $input.settings.required);
             }
             if ($input.settings.placeholder) {
                 $input.attr('placeholder', $input.settings.placeholder);
