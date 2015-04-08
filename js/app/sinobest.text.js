@@ -36,7 +36,7 @@
          * @return object
          */
         $input.getState = function () {
-            return $.extend({}, getAttributes(), getSettings());
+            return $.extend({}, getAttributes());
         };
 
         /**
@@ -45,7 +45,6 @@
          * @return  object
          */
         $input.setState = function (stateJson) {
-            // 这里的State除了DOM属性之外，其他的部分较为模糊，具体指明不清晰，无法设置
             $.each(stateJson, function (k, v) {
                 $input.attr(k, v);
             });
@@ -93,7 +92,7 @@
         function render() {
             $input.addClass($input.settings.className);
             if ($input.settings.required) {
-                $input.attr('required', $input.settings.required);
+                $input.attr('required',$input.settings.required);
             }
             if ($input.settings.placeholder) {
                 $input.attr('placeholder', $input.settings.placeholder);
