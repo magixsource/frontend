@@ -45,7 +45,7 @@
          * @return object
          */
         $select.getState = function () {
-            return $.extend({}, getAttributes(), getSettings());
+            return $.extend({}, getAttributes());
         };
 
         /**
@@ -54,7 +54,6 @@
          * @return  object
          */
         $select.setState = function (stateJson) {
-            // 这里的State除了DOM属性之外，其他的部分较为模糊，具体指明不清晰，无法设置
             $.each(stateJson, function (k, v) {
                 $select.attr(k, v);
             });
