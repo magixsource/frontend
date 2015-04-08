@@ -4,7 +4,7 @@
 (function ($) {
     var defaults = {
         className:"sinobest-hidden", //CSS类名
-        require:false, // 是否必录
+        required:false, // 是否必录
         value:""
     };
 
@@ -90,8 +90,8 @@
          */
         function render() {
             $input.addClass($input.settings.className);
-            if ($input.settings.require) {
-                $input.attr('require', $input.settings.require);
+            if ($input.settings.required) {
+                $input.attr('required', $input.settings.required);
             }
             if ($input.settings.value) {
                 $input.val($input.settings.value);
