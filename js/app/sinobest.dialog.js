@@ -16,7 +16,8 @@
                 cancelValue:"取消",
                 onClick:function () {
                 },
-                onCancel:null
+                onCancel:null,
+                button:null
             };
             var settings = $.extend({}, defaults, options || {});
 
@@ -119,7 +120,8 @@
 
                     instance = dialog({
                         title:settings.title,
-                        content:content
+                        content:content,
+                        button:settings.button
                     });
                     instance.showModal();
                 } else {
@@ -133,7 +135,8 @@
 
                     instance = dialog({
                         title:settings.title,
-                        content:content
+                        content:content,
+                        button:settings.button
                     });
                     instance.show();
                 }
