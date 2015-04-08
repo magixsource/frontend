@@ -13,6 +13,7 @@
         $checkbox.settings = settings;
 
         $checkbox.getValue = function () {
+            // 多选，按什么符号分隔开
             return $checkbox.filter(':checked').val();
         };
 
@@ -63,11 +64,13 @@
         }
 
         function verticalRadio() {
-
+            $checkbox.wrapAll("<ul class='sinobest-ul'>").wrap('<li>').addClass('sinobest-v-li').each(function () {
+                $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
+            });
         }
 
         function horizontalRadio() {
-            $checkbox.wrapAll("<ul class='sinobest-ul'>").wrap('<li>').addClass('sinobest-v-li');
+
         }
 
         render();
