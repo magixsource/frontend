@@ -11,13 +11,12 @@
                 height:null,
                 zIndex:1024, //影响全局
                 title:null,
-                // 自定义按钮
                 okValue:"确定",
                 cancelValue:"取消",
                 onClick:function () {
                 },
                 onCancel:null,
-                button:null
+                button:null// 自定义按钮
             };
             var settings = $.extend({}, defaults, options || {});
 
