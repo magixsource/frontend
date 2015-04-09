@@ -4,13 +4,13 @@
             var defaults = {
                 containerId:null,
                 content:null, // 设置content之后，会覆盖container的内容
-                className:"sinobest-dialog", //CSS类名(Unuse)
+                className:"sinobest-dialog", //CSS类名
                 dialogType:"dialog",
                 text:"",
-                width:null, //(Unuse)
-                height:null, //(Unuse)
+                width:null,
+                height:null,
                 zIndex:1024, //影响全局
-                title:null, //(Unuse)
+                title:null,
                 // 自定义按钮
                 okValue:"确定",
                 cancelValue:"取消",
@@ -40,17 +40,23 @@
             };
 
             this.getState = function () {
-                return $.extend({}, getAttributes(), getSettings());
+                return $.extend({}, getAttributes());
             };
 
             this.setState = function (stateJson) {
+                var ogi = instance.node;
 
+                $.each(stateJson, function (k, v) {
+                    $(ogi).attr(k, v);
+                });
+                return instance;
             };
 
             this.getDom = function () {
-                if (settings.dialogType == 'modal' || settings.dialogType == 'dialog') {
-                    return document.getElementById(settings.containerId);
-                }
+//                if (settings.dialogType == 'modal' || settings.dialogType == 'dialog') {
+//                    return document.getElementById(settings.containerId);
+//                }
+                return instance.node;
             };
 
             this.reload = function () {
@@ -73,7 +79,18 @@
             };
 
             function getAttributes() {
+                var ogi = instance.node;
 
+                var attributes = "{";
+                // DOM attributes
+                $.each(ogi.attributes, function (i, attr) {
+                    if (i > 0) {
+                        attributes += ",";
+                    }
+                    attributes += ('"' + attr.name + '":"' + attr.value + '"');
+                });
+                attributes += "}";
+                return $.parseJSON(attributes);
             }
 
             function getSettings() {
@@ -85,14 +102,19 @@
                     //$.dialog({content:settings.text});
                     instance = dialog({
                         content:settings.text,
+                        width:settings.width,
+                        height:settings.height,
                         cancel:false,
                         okValue:settings.okValue,
                         ok:settings.onClick
                     });
+                    $(instance.node).addClass(settings.className);
                     instance.show();
                 } else if (settings.dialogType == 'confirm') {
                     instance = dialog({
                         content:settings.text,
+                        width:settings.width,
+                        height:settings.height,
                         okValue:settings.okValue,
                         ok:settings.onClick,
                         cancelValue:settings.cancelValue,
@@ -101,8 +123,11 @@
                     instance.show();
                 } else if (settings.dialogType == 'message') {
                     instance = dialog({
-                        content:settings.text
+                        content:settings.text,
+                        width:settings.width,
+                        height:settings.height
                     });
+                    $(instance.node).addClass(settings.className);
                     instance.show();
                     if (settings.autoClose) {
                         setTimeout(function () {
@@ -121,8 +146,11 @@
                     instance = dialog({
                         title:settings.title,
                         content:content,
+                        width:settings.width,
+                        height:settings.height,
                         button:settings.button
                     });
+                    $(instance.node).addClass(settings.className);
                     instance.showModal();
                 } else {
                     // handle as dialog
@@ -136,8 +164,11 @@
                     instance = dialog({
                         title:settings.title,
                         content:content,
+                        width:settings.width,
+                        height:settings.height,
                         button:settings.button
                     });
+                    $(instance.node).addClass(settings.className);
                     instance.show();
                 }
             }
