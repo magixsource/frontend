@@ -48,6 +48,7 @@
         };
         $radio.destory = function () {
             $radio.remove();
+            $radio.next("label").remove();
         };
 
         function render() {

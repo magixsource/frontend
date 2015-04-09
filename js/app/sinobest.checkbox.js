@@ -4,6 +4,7 @@
         required:false, // 是否必录
         readonly:false,
         direction:'horizontal', //vertical、table
+        columnCount:null,
         value:""
     };
 
@@ -37,12 +38,15 @@
         $checkbox.display = function (b) {
             if (b) {
                 $checkbox.show();
+                $checkbox.next("label").show();
             } else {
                 $checkbox.hide();
+                $checkbox.next("label").hide();
             }
         };
         $checkbox.destory = function () {
             $checkbox.remove();
+            $checkbox.next("label").remove();
         };
 
         function render() {
@@ -60,17 +64,40 @@
         }
 
         function tableRadio() {
-
+            if ($checkbox.parent("td").length > 0) {
+                return;
+            }
+            $checkbox.wrapAll("<table>");
+            var last;
+            $checkbox.each(function (idx) {
+                if (idx % settings.columnCount == 0) {
+                    last = $(this).wrap("<tr>").wrap("<td>");
+                } else {
+                    $(this).insertAfter(last.parent("td")).wrap("<td>");
+                }
+                $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
+            });
         }
 
         function verticalRadio() {
-            $checkbox.wrapAll("<ul class='sinobest-ul'>").wrap('<li>').addClass('sinobest-v-li').each(function () {
+//            $checkbox.wrapAll("<ul class='sinobest-ul'>").wrap('<li>').addClass('sinobest-v-li').each(function () {
+//                $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
+//            });
+            if ($checkbox.parent("td").length > 0) {
+                return;
+            }
+            $checkbox.wrapAll("<table>").wrap("<tr><td>").each(function () {
                 $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
             });
         }
 
         function horizontalRadio() {
-
+            if ($checkbox.parent("td").length > 0) {
+                return;
+            }
+            $checkbox.wrapAll("<table><tr>").wrap("<td>").each(function () {
+                $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
+            });
         }
 
         render();
