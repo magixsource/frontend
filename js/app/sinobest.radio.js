@@ -4,6 +4,7 @@
         required:false, // 是否必录
         readonly:false,
         direction:'horizontal', //vertical、table
+        columnCount:null,
         value:""
     };
 
@@ -39,8 +40,10 @@
         $radio.display = function (b) {
             if (b) {
                 $radio.show();
+                $radio.next("label").show();
             } else {
                 $radio.hide();
+                $radio.next("label").hide();
             }
         };
         $radio.destory = function () {
@@ -74,19 +77,44 @@
         }
 
         function tableRadio() {
-
+            if ($radio.parent("td").length > 0) {
+                return;
+            }
+            $radio.wrapAll("<table>");
+            var last;
+            $radio.each(function (idx) {
+                if (idx % settings.columnCount == 0) {
+                    last = $(this).wrap("<tr>").wrap("<td>");
+                } else {
+                    $(this).insertAfter(last.parent("td")).wrap("<td>");
+                }
+                $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
+            });
         }
 
         function verticalRadio() {
-
+//            $radio.wrapAll("<ul class='sinobest-ul'>").wrap('<li>').addClass('sinobest-v-li').each(function () {
+//                $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
+//            });
+            // 排序基本结构在reload的时候不需要重构
+            if ($radio.parent("td").length > 0) {
+                return;
+            }
+            $radio.wrapAll("<table>").wrap("<tr><td>").each(function () {
+                $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
+            });
         }
 
         function horizontalRadio() {
-            $radio.wrapAll("<ul class='sinobest-ul'>").wrap('<li>').addClass('sinobest-v-li').each(function () {
+            if ($radio.parent("td").length > 0) {
+                return;
+            }
+            $radio.wrapAll("<table><tr>").wrap("<td>").each(function () {
                 $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
             });
         }
 
         render();
+        return this;
     };
 })(jQuery);
