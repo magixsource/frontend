@@ -56,7 +56,7 @@
             $radio.addClass(settings.className);
             if (settings.direction == 'table') {
                 tableRadio();
-            } else if (settings.direction == 'vertical') {
+            } else if (settings.direction == 'row') {
                 verticalRadio();
             } else {
                 //horizontal
