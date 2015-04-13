@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" href="./css/ui-dialog.css">
+    <link href="./css/selectize.default.css" rel="stylesheet" media="screen">
+    <link href="./css/selectize.pagination.css" rel="stylesheet" media="screen">
+    <link href="./css/selectize.selectbox.css" rel="stylesheet" media="screen">
     <style>
         .hide {
             display: none;
@@ -12,6 +15,20 @@
         .show {
             display: block;
         }
+
+        .sinobest-ul {
+            list-style: none;
+        }
+
+        .sinobest-v-li {
+            vertical-align: middle;
+        }
+
+        .sinobest-bigselect {
+            width: 50%;
+        }
+
+
     </style>
 </head>
 <body>
@@ -47,7 +64,62 @@
 <div id="dialog" class="hide">
     Hi,Dialog
 </div>
+<br>
+<br>
 
+<input type="radio" class="radio" name="sex" id="male" value="male"/><label for="male">Male</label>
+<input type="radio" class="radio" name="sex" id="female" value="female"/><label for="female">Female</label>
+<input type="radio" class="radio" name="sex" id="female1" value="female1"/><label for="female1">Female1</label>
+<input type="radio" class="radio" name="sex" id="female2" value="female2"/><label for="female2">Female2</label>
+<input type="radio" class="radio" name="sex" id="female3" value="female3"/><label for="female3">Female3</label>
+<input type="radio" class="radio" name="sex" id="female4" value="female4"/><label for="female4">Female4</label>
+
+
+<br>
+<br>
+<input type="button" id="j" name="j"/>
+
+<br>
+<br>
+
+<input type="checkbox" name="fav" id="soccer" value="soccer"/><label for="soccer">Soccer</label>
+<input type="checkbox" name="fav" id="basketball" value="basketball"/> <label for="basketball">Basketball</label>
+<input type="checkbox" name="fav" id="fishing" value="fishing"/> <label for="fishing">Fishing</label>
+<input type="checkbox" name="fav" id="hunt" value="hunt"/> <label for="hunt">Hunt</label>
+
+
+<br>
+<br>
+<input type="button" id="k" name="k"/>
+
+
+<br>
+<br>
+<input type="text" id="dt" name="dt"/>
+<input type="button" id="m" name="m"/>
+
+<br>
+<br>
+<input type="text" class="date-range" id="dr1" name="dt1"/>
+到
+<input type="text" class="date-range" id="dr2" name="dt2"/>
+<input type="button" id="n" name="n"/>
+
+
+<br>
+<br>
+<select id="bs" name="bs" multiple>
+    <option></option>
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+    <option value="3">Option 3</option>
+    <option value="4">Option 4</option>
+    <option value="5">Option 5</option>
+</select>
+<input type="button" id="o" name="o"/>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
 <!--<script src="./js/require.js"></script>-->
 <!--<script src="./js/app.js"></script>-->
@@ -59,12 +131,19 @@
 <script src="./js/app/sinobest.button.js"></script>
 <script src="./js/app/sinobest.select.js"></script>
 <script src="./js/app/sinobest.dialog.js"></script>
+<script src="./js/app/sinobest.radio.js"></script>
+<script src="./js/app/sinobest.checkbox.js"></script>
+<script src="./js/lib/My97DatePicker/WdatePicker.js"></script>
+<script src="./js/app/sinobest.date.js"></script>
+<script src="./js/app/sinobest.daterange.js"></script>
+<script src="./js/lib/selectize.js"></script>
+<script src="./js/app/sinobest.bigselect.js"></script>
 
 <script>
     $(function () {
         var initJson = {
             placeholder:"Your name",
-            requried:true
+            required:true
         };
         var a = $('#a').sbtext(initJson);
 
@@ -76,15 +155,15 @@
         }});
 
         var optionData =
-            {
-                "a":"a",
-                "b":"b"
-            };
+        {
+            "a":"a",
+            "b":"b"
+        };
 
-
-        var d = $('#d').sbselect({value:"5",data:optionData, onChange:function () {
+        var d = $('#d').sbselect({value:"5", onChange:function () {
 
         }});
+        var detail = d.getDetail();
 
         var alertJson = {
             dialogType:"alert",
@@ -95,7 +174,11 @@
         };
 
         var e = $('#e').sbbutton({value:"Alert", onClick:function () {
-            $.sbdialog(alertJson);
+            var alert1 = $.sbdialog(alertJson);
+            alert1.setState({"test":"testvalue"});
+
+//            console.log(alert1.getState());
+//            console.log(alert1.getDom());
         }});
 
         var confirmJson = {
@@ -113,6 +196,8 @@
         };
         var f = $('#f').sbbutton({value:"Confirm", onClick:function () {
             var confirm = $.sbdialog(confirmJson);
+//            console.log(confirm.getState());
+//            console.log(confirm.getDom());
         }});
 
         var msgJson = {
@@ -122,22 +207,102 @@
         };
         var modalJson = {
             dialogType:"modal",
-            containerId:"modal"
+            containerId:"modal",
+            title:"模态窗口",
+            button:[
+                {
+                    value:"默认按钮",
+                    callback:function () {
+                        alert('Default Btn');
+                    },
+                    autofocus:true
+                },
+                {
+                    value:"不可用",
+                    callback:function () {
+                    },
+                    disabled:true
+                },
+                {
+                    value:"close"
+                }
+            ]
+
         };
         var dialogJson = {
             dialogType:"dialog",
-            containerId:"dialog"
+            containerId:"dialog",
+            title:"普通对话窗口"
         };
         var g = $('#g').sbbutton({value:"Message", onClick:function () {
             var msg = $.sbdialog(msgJson);
+//            console.log(msg.getState());
+//            console.log(msg.getDom());
         }});
         var h = $('#h').sbbutton({value:"Modal", onClick:function () {
             var modal = $.sbdialog(modalJson);
+//            console.log(modal.getState());
+//            console.log(modal.getDom());
         }});
         var i = $('#i').sbbutton({value:"Dialog", onClick:function () {
             var dialog = $.sbdialog(dialogJson);
+            console.log(dialog.getState());
+            console.log(dialog.getDom());
         }});
 
+        // radio
+        var radioJson = {
+            columnCount:3,
+            direction:'vertical'
+        };
+        var rdo = $('input[name=sex]').sbradio(radioJson);
+
+        var j = $('#j').sbbutton({value:"Radio", onClick:function () {
+            //rdo.setValue('male');
+            console.log('---' + rdo.getValue());
+            //rdo.display(false);
+            //rdo.reload();
+        }});
+
+        //checkbox
+        var checkboxJson = {direction:'table', columnCount:3};
+        var checkbox = $('input[name=fav]').sbcheckbox(checkboxJson);
+        var k = $('#k').sbbutton({value:"Checkbox", onClick:function () {
+            checkbox.setValue('fishing');
+            console.log('---' + checkbox.getValue());
+        }});
+
+        var dateJson = {minDate:"2015-04-07", onpicked:function () {
+            alert('You picked');
+        }};
+        var date = $('#dt').sbdate(dateJson);
+        var m = $('#m').sbbutton({value:"Date", onClick:function () {
+            date.setValue('2015-01-01');
+            console.log(date.getValue());
+            console.log(date.getDom());
+            console.log(date.getState());
+        }});
+
+        var dateRangeJson = {};
+        var range = $('.date-range').sbdaterange(dateRangeJson);
+        var n = $('#n').sbbutton({value:"DateRange", onClick:function () {
+            console.log(range.getValue());
+            console.log(range.getDom());
+            console.log(range.getState());
+        }});
+
+        var bigselectJson = {value:"[{'detail':'中国语言文学类','code':'050100'}]",type:"multiple", paging:"true",url:"http://127.0.0.1:9999/ajax/bigselect/multiple"};
+        var bs = $('#bs').sbbigselect(bigselectJson);
+        //var bs = $('#bs').selectize();
+        //bs.setValue([{"code":'090400',"detail":"zzz"},{"code":'090500','detail':"AAA"}]);
+        var o = $('#o').sbbutton({value:"Bigselect", onClick:function () {
+            console.log(bs.getValue());
+            console.log(bs.getDom());
+            console.log(bs.getState());
+            bs.display(true);
+            //bs.destory();
+            //bs.reload();
+        }});
     });
 
 </script>
