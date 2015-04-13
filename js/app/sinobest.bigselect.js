@@ -37,13 +37,16 @@
                 return;
             }
 
+            var key = settings.valueField;
+            var label = settings.labelField;
+
             for (var i = 0; i < v.length; i++) {
                 var item = v[i];
                 control.addOption({
-                    code:item.code,
-                    detail:item.detail
+                    "code":item[key],
+                    "detail":item[label]
                 });
-                control.addItem(item.code);
+                control.addItem(item[key]);
             }
         };
 
