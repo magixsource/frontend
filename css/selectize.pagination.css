@@ -1,0 +1,29 @@
+.pagination{
+	width:100%;
+}
+.pagination-first-btn{
+    width: 20%;
+}
+.pagination-previous-btn{
+    width: 20%;
+}
+.pagination-next-btn{
+    width: 20%;
+}
+.pagination-last-btn{
+    width: 20%;
+}
+.pagination-info{
+    display:inline-block;
+    text-align: center;
+    width: 20%;
+    *width:19.5%;
+}
+.select-all-btn{
+    width: 50%;
+    *width:49.95%;
+}
+.clear-all-btn{
+    width: 50%;
+    *width:49.95%;
+}

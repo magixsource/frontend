@@ -1,0 +1,72 @@
+.selectize-control.multi .selectize-input .item {
+    background-color: #1b9dec;
+    background-repeat: repeat-x;
+    cursor: pointer;
+	margin: 0 3px 3px 0;
+	padding: 2px 6px;
+	background: #1da7ee;
+	color: #ffffff;
+	border: 1px solid #0073bb;
+	vertical-align: baseline;
+}
+.selectize-input .item{
+	display:inline;
+    zoom: 1;
+}
+.selectize-input .info {
+	background-color: #1b9dec;
+    background-repeat: repeat-x;
+    cursor: pointer;
+	margin: 0 3px 3px 0;
+	padding: 2px 6px;
+	background: #1da7ee;
+	color: #ffffff;
+	border: 1px solid #0073bb;
+	vertical-align: baseline;
+    display:inline;
+    zoom: 1;
+}
+.selectize-input input{
+	color: #303030;
+	font-family: inherit;
+	font-size: 13px;
+	line-height: 18px;
+	-webkit-font-smoothing: inherit;
+	
+	padding: 0 !important;
+	min-height: 0 !important;
+	max-height: none !important;
+	max-width: 100% !important;
+	margin: 0 1px !important;
+	text-indent: 0 !important;
+	border: 0 none !important;
+	background: none !important;
+	line-height: inherit !important;
+	-webkit-user-select: auto !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+
+    display:inline;
+    zoom: 1;
+}
+
+.hnisi-selectbox .selectize-input.has-items .item{
+    display: none;
+}
+
+.selectize-dropdown {
+  position: absolute;
+  z-index: 10;
+  border: 1px solid #d0d0d0;
+  background: #ffffff;
+  margin: -1px 0 0 0;
+  border-top: 0 none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-border-radius: 0 0 3px 3px;
+  -moz-border-radius: 0 0 3px 3px;
+  border-radius: 0 0 3px 3px;
+}
