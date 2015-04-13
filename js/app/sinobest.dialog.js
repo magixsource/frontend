@@ -101,6 +101,7 @@
                     //$.dialog({content:settings.text});
                     instance = dialog({
                         content:settings.text,
+                        zIndex:settings.zIndex,
                         width:settings.width,
                         height:settings.height,
                         cancel:false,
@@ -112,6 +113,7 @@
                 } else if (settings.dialogType == 'confirm') {
                     instance = dialog({
                         content:settings.text,
+                        zIndex:settings.zIndex,
                         width:settings.width,
                         height:settings.height,
                         okValue:settings.okValue,
@@ -122,6 +124,7 @@
                     instance.show();
                 } else if (settings.dialogType == 'message') {
                     instance = dialog({
+                        zIndex:settings.zIndex,
                         content:settings.text,
                         width:settings.width,
                         height:settings.height
@@ -144,6 +147,7 @@
 
                     instance = dialog({
                         title:settings.title,
+                        zIndex:settings.zIndex,
                         content:content,
                         width:settings.width,
                         height:settings.height,
@@ -162,6 +166,7 @@
 
                     instance = dialog({
                         title:settings.title,
+                        zIndex:settings.zIndex,
                         content:content,
                         width:settings.width,
                         height:settings.height,
