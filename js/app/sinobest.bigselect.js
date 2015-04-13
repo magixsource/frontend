@@ -5,6 +5,7 @@
         readonly:false,
         disabled:false,
         url:null,
+        saveType:"c", //d
         type:'single', // multiple
         pageSize:10,
         paging:null,
@@ -23,6 +24,10 @@
     $.fn.sbbigselect = function (options) {
         var settings = $.extend({}, defaults, options || {});
         var $bigselect = this;
+
+        if(settings.saveType=="d"){
+            settings.valueField = settings.labelField;
+        }
         $bigselect.settings = settings;
 
         var $select;
@@ -48,6 +53,10 @@
                 });
                 control.addItem(item[key]);
             }
+        };
+
+        $bigselect.getDetail = function(){
+            return control.getItems();
         };
 
         $bigselect.getState = function () {

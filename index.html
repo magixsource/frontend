@@ -291,7 +291,7 @@
             console.log(range.getState());
         }});
 
-        var bigselectJson = {value:"[{'detail':'中国语言文学类','code':'050100'}]",type:"multiple", paging:"true",url:"http://127.0.0.1:9999/ajax/bigselect/multiple"};
+        var bigselectJson = {searchField:['code','detail'],saveType:"c",value:"[{'detail':'中国语言文学类','code':'050100'}]",type:"multiple", paging:"true",url:"http://127.0.0.1:9999/ajax/bigselect/multiple"};
         var bs = $('#bs').sbbigselect(bigselectJson);
         //var bs = $('#bs').selectize();
         //bs.setValue([{"code":'090400',"detail":"zzz"},{"code":'090500','detail':"AAA"}]);
@@ -300,6 +300,7 @@
             console.log(bs.getDom());
             console.log(bs.getState());
             bs.display(true);
+            console.log(bs.getDetail());
             //bs.destory();
             //bs.reload();
         }});
