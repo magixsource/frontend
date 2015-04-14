@@ -3,7 +3,7 @@
         className:"sinobest-radio", //CSS类名
         required:false, // 是否必录
         readonly:false,
-        direction:'horizontal', //vertical、table
+        direction:'line', //row、table
         columnCount:null,
         value:""
     };
