@@ -9,7 +9,7 @@
                 text:"",
                 width:null,
                 height:null,
-                zIndex:1024, //影响全局
+                zIndex:9999, //影响全局
                 title:null,
                 okValue:"确定",
                 cancelValue:"取消",
