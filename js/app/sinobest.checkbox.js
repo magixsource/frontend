@@ -3,7 +3,7 @@
         className:"sinobest-checkbox", //CSS类名
         required:false, // 是否必录
         readonly:false,
-        direction:'horizontal', //vertical、table
+        direction:'line', //row、table
         columnCount:null,
         value:""
     };
@@ -15,14 +15,27 @@
 
         $checkbox.getValue = function () {
             // 多选，按什么符号分隔开
-            return $checkbox.filter(':checked').val();
+            var chkValue = [];
+            $checkbox.filter(':checked').each(function () {
+                chkValue.push($(this).val());
+            });
+            return chkValue;
         };
 
         $checkbox.setValue = function (v) {
             var currentValue = $checkbox.getValue();
+            $.each(currentValue, function (idx, value) {
+                $checkbox.filter('[value=' + value + ']').prop('checked', false);
+            });
 
-            $checkbox.filter('[value=' + currentValue + ']').prop('checked', false);
-            return $checkbox.filter('[value=' + v + ']').prop('checked', true);
+            if (!$.isArray(v)) {
+                v = [v];
+            }
+            $.each(v, function (idx, value) {
+                $checkbox.filter('[value=' + value + ']').prop('checked', true);
+            });
+
+            return $checkbox;
         };
 
         $checkbox.getState = function () {
@@ -54,7 +67,7 @@
             $checkbox.addClass(settings.className);
             if (settings.direction == 'table') {
                 tableRadio();
-            } else if (settings.direction == 'vertical') {
+            } else if (settings.direction == 'row') {
                 verticalRadio();
             } else {
                 //horizontal
