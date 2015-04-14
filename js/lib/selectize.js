@@ -3961,11 +3961,10 @@
             var html = '<a href="javascript:void(0)" class="' + options.className + '" tabindex="-1" title="' + escape_html(options.title) + '">' + options.label + '</a>';
 
             var append = function(html_container, html_element) {
-                // var pos = html_container.search(/(<\/[^>]+>\s*)$/);
-            	// return html_container.substring(0, pos) + html_element + html_container.substring(pos);
-
-            	// IE6 float bug fixed by linpeng 2015-3-12
-                return jQuery(html_container).prepend(html_element)[0].outerHTML;
+                var pos = html_container.search(/(<\/[^>]+>\s*)$/);
+                // IE6 float bug fixed，之前用jQuery操作返回outerHTML，但在IE下HTML错误，现改为修改pos add by linpeng 2015-4-14
+                pos = pos - $(html_container).text().length;
+            	return html_container.substring(0, pos) + html_element + html_container.substring(pos);
             };
 
             this.setup = (function() {
