@@ -59,7 +59,7 @@
             } else if (settings.direction == 'row') {
                 verticalRadio();
             } else {
-                //horizontal
+//                //horizontal
                 horizontalRadio();
             }
 
@@ -81,27 +81,24 @@
             if ($radio.parent("td").length > 0) {
                 return;
             }
-            $radio.wrapAll("<table>");
+            $radio.wrapAll("<table><tbody></tbody></table>");
             var last;
             $radio.each(function (idx) {
                 if (idx % settings.columnCount == 0) {
-                    last = $(this).wrap("<tr>").wrap("<td>");
+                    last = $(this).wrap("<tr><td></td></tr>");
                 } else {
-                    $(this).insertAfter(last.parent("td")).wrap("<td>");
+                    $(this).insertAfter(last.parent("td")).wrap("<td></td>");
                 }
                 $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
             });
         }
 
         function verticalRadio() {
-//            $radio.wrapAll("<ul class='sinobest-ul'>").wrap('<li>').addClass('sinobest-v-li').each(function () {
-//                $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
-//            });
             // 排序基本结构在reload的时候不需要重构
             if ($radio.parent("td").length > 0) {
                 return;
             }
-            $radio.wrapAll("<table>").wrap("<tr><td>").each(function () {
+            $radio.wrapAll("<table><tbody></tbody></table>").wrap("<tr><td></td></tr>").each(function () {
                 $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
             });
         }
@@ -110,7 +107,7 @@
             if ($radio.parent("td").length > 0) {
                 return;
             }
-            $radio.wrapAll("<table><tr>").wrap("<td>").each(function () {
+            $radio.wrapAll("<table><tbody><tr></tr></tbody></table>").wrap("<td></td>").each(function () {
                 $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
             });
         }
