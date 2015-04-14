@@ -80,13 +80,13 @@
             if ($checkbox.parent("td").length > 0) {
                 return;
             }
-            $checkbox.wrapAll("<table>");
+            $checkbox.wrapAll("<table><tbody></tbody></table>");
             var last;
             $checkbox.each(function (idx) {
                 if (idx % settings.columnCount == 0) {
-                    last = $(this).wrap("<tr>").wrap("<td>");
+                    last = $(this).wrap("<tr><td></td></tr>");
                 } else {
-                    $(this).insertAfter(last.parent("td")).wrap("<td>");
+                    $(this).insertAfter(last.parent("td")).wrap("<td></td>");
                 }
                 $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
             });
@@ -99,7 +99,7 @@
             if ($checkbox.parent("td").length > 0) {
                 return;
             }
-            $checkbox.wrapAll("<table>").wrap("<tr><td>").each(function () {
+            $checkbox.wrapAll("<table><tbody></tbody></table>").wrap("<tr><td></td></tr>").each(function () {
                 $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
             });
         }
@@ -108,7 +108,7 @@
             if ($checkbox.parent("td").length > 0) {
                 return;
             }
-            $checkbox.wrapAll("<table><tr>").wrap("<td>").each(function () {
+            $checkbox.wrapAll("<table><tbody><tr></tr></tbody></table>").wrap("<td></td>").each(function () {
                 $('label[for=' + $(this).attr('id') + ']').insertAfter($(this));
             });
         }
