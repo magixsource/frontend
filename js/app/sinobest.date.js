@@ -60,7 +60,7 @@
                 $date.attr('readonly', settings.readonly);
             }
             if (settings.required) {
-                $date.attr('readonly', settings.required);
+                $date.attr('required', settings.required);
             }
             if (settings.value) {
                 $date.val(settings.value);
