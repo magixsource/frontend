@@ -18,6 +18,7 @@
         onItemAdd:null,
         onItemRemove:null,
         plugins:null,
+        editEnable:false,//是否开启编辑模式
         value:null
     };
 
