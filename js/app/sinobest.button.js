@@ -4,7 +4,7 @@
 (function ($) {
     var defaults = {
         className:"sinobest-button", //CSS类名
-        readonly:false,
+        disabled:false,
         value:"",
         onClick:null
     };
@@ -91,8 +91,8 @@
         function render() {
             $input.addClass($input.settings.className);
 
-            if ($input.settings.readonly) {
-                $input.attr('readonly', 'readonly');
+            if ($input.settings.disabled) {
+                $input.attr('disabled', 'disabled');
             }
             if ($input.settings.value) {
                 $input.val($input.settings.value);
@@ -117,13 +117,6 @@
             });
             attributes += "}";
             return $.parseJSON(attributes);
-        }
-
-        /**
-         * Get runtime settings
-         */
-        function getSettings() {
-            return $input.settings;
         }
 
         /**
