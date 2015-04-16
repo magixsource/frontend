@@ -7,6 +7,8 @@
         required:false, // 是否必录
         placeholder:"",
         readonly:false,
+        regex:null,
+        callback:null,
         value:""
     };
 
@@ -46,7 +48,15 @@
          */
         $input.setState = function (stateJson) {
             $.each(stateJson, function (k, v) {
-                $input.attr(k, v);
+                if (v) {
+                    if (k == 'value') {
+                        $input.val(v);
+                    } else {
+                        $input.attr(k, v);
+                    }
+                } else {
+                    $input.removeAttr(k);
+                }
             });
             return $input;
         };
@@ -92,7 +102,7 @@
         function render() {
             $input.addClass($input.settings.className);
             if ($input.settings.required) {
-                $input.attr('required',$input.settings.required);
+                $input.attr('required', $input.settings.required);
             }
             if ($input.settings.placeholder) {
                 $input.attr('placeholder', $input.settings.placeholder);
