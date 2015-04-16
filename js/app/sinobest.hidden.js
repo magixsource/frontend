@@ -4,7 +4,6 @@
 (function ($) {
     var defaults = {
         className:"sinobest-hidden", //CSS类名
-        required:false, // 是否必录
         value:""
     };
 
@@ -64,20 +63,7 @@
         $input.reload = function () {
             return render();
         };
-        /**
-         * show or hide
-         * @param show show or hide
-         * @return object
-         */
-        $input.display = function (show) {
-            // hidden无意义
-//            if (show) {
-//                $input.show();
-//            } else {
-//                $input.hide();
-//            }
-//            return $input;
-        };
+
         /**
          * Destory
          */
@@ -90,9 +76,7 @@
          */
         function render() {
             $input.addClass($input.settings.className);
-            if ($input.settings.required) {
-                $input.attr('required', $input.settings.required);
-            }
+
             if ($input.settings.value) {
                 $input.val($input.settings.value);
             }
@@ -113,13 +97,6 @@
             });
             attributes += "}";
             return $.parseJSON(attributes);
-        }
-
-        /**
-         * Get runtime settings
-         */
-        function getSettings() {
-            return $input.settings;
         }
 
         /**
