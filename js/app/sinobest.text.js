@@ -5,6 +5,8 @@
     var defaults = {
         className:"sinobest-text", //CSS类名
         required:false, // 是否必录
+        minlength:null,
+        maxlength:null,
         placeholder:"",
         readonly:false,
         regex:null,
@@ -95,6 +97,48 @@
         $input.destory = function () {
             return  $input.remove();
         };
+
+        /**
+         * Validate input
+         */
+        $input.validate = function () {
+            var isFunc = $.isFunction(settings.callback);
+            if (isFunc) {
+                return settings.callback();
+            } else {
+                // basic validate
+                var v = $input.getValue();
+                var validator = $.sbvalidate();
+
+                var isOk = false;
+                if (settings.required) {
+                    isOk = validator.required($input[0], v);
+                    if (!isOk) {
+                        return "不能为空";
+                    }
+                }
+                if (settings.minlength) {
+                    isOk = validator.minlength($input[0], v, settings.minlength);
+                    if (!isOk) {
+                        return "长度不能小于" + settings.minlength;
+                    }
+                }
+                if (settings.maxlength) {
+                    isOk = validator.maxlength($input[0], v, settings.maxlength);
+                    if (!isOk) {
+                        return "长度不能大于" + settings.maxlength;
+                    }
+                }
+                if (settings.regex) {
+                    isOk = validator.valid(settings.regex, v);
+                    if (!isOk) {
+                        return "格式不正确";
+                    }
+                }
+                return ""; //验证通过
+            }
+        };
+
 
         /**
          * Init
