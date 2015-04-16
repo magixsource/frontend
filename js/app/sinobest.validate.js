@@ -25,7 +25,7 @@
             }
 
             this.valid = function (regex, value) {
-                return new RegExp(regex).test(value);
+                return regex.test(value);
             };
 
             this.checkable = function (element) {
