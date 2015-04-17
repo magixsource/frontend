@@ -6,8 +6,15 @@
         className:"sinobest-select", //CSS类名
         required:false, // 是否必录
         readonly:false,
+        allowEmptyOption:true,
+        name:null,
+        id:null,
+        valueField:"code",
+        labelField:"detail",
         value:"",
         data:null,
+        url:null,
+        multiple:false,
         onChange:null
     };
 
@@ -96,30 +103,77 @@
         };
 
         /**
+         * As you see for build option
+         */
+        function buildOption() {
+            if ($select.settings.allowEmptyOption) {
+                $select.$control.append("<option></option>");
+            }
+            $.each($select.settings.data, function (idx, obj) {
+                var option = $("<option></option>");
+                $.each(obj, function (k, v) {
+                    if (k == $select.settings.valueField) {
+                        option.val(v);
+                    } else if (k == $select.settings.labelField) {
+                        option.text(v);
+                    } else {
+                        option.attr(k, v);
+                    }
+                });
+                $select.$control.append(option);
+            });
+        };
+
+        function clearOption() {
+            $select.$control.find("option").remove();
+        };
+
+        /**
          * Init
          */
         function render() {
+            if ($select.settings.multiple) {
+                $select.html('<select multiple></select>');
+            } else {
+                $select.html('<select></select>');
+            }
+
+            $select.$control = $select.find("select");
             $select.addClass($select.settings.className);
+
+            if ($select.settings.id) {
+                $select.$control.attr('id', $select.settings.id);
+            }
+            if ($select.settings.name) {
+                $select.$control.attr('name', $select.settings.name);
+            }
             if ($select.settings.required) {
-                $select.attr('required', $select.settings.required);
+                $select.$control.attr('required', $select.settings.required);
             }
             if ($select.settings.readonly) {
-                $select.attr('readonly', 'readonly');
+                $select.$control.attr('readonly', $select.settings.readonly);
             }
+            if ($select.settings.data) {
+                // clear all option
+                clearOption();
+                // data reload
+                buildOption($select.settings.data);
+            } else {
+                // getJson for only one time
+                $.getJSON($select.settings.url, function (data) {
+                    $select.settings.data = data;
+                    clearOption();
+                    buildOption($select.settings.data);
+                });
+            }
+
             if ($select.settings.value) {
                 $select.val($select.settings.value);
             }
             if ($select.settings.onChange) {
                 $select.on('change', $select.settings.onChange);
             }
-            if ($select.settings.data) {
-                // clear all option
-                $select.find("option").remove();
-                // data reload
-                $.each($select.settings.data, function (k, v) {
-                    $select.append('<option value="' + v + '">' + k + '</option>');
-                });
-            }
+
             return $select;
         }
 
@@ -137,13 +191,6 @@
             });
             attributes += "}";
             return $.parseJSON(attributes);
-        }
-
-        /**
-         * Get runtime settings
-         */
-        function getSettings() {
-            return $select.settings;
         }
 
         /**
