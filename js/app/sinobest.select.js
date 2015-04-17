@@ -28,7 +28,7 @@
          * @return  object
          */
         $select.getValue = function () {
-            return $select.val();
+            return $select.$control.val();
         };
 
         /**
@@ -37,7 +37,7 @@
          * @return object
          */
         $select.setValue = function (value) {
-            return $select.val(value);
+            return $select.$control.val(value);
         };
 
         /**
@@ -45,7 +45,7 @@
          * @return {*}
          */
         $select.getDetail = function () {
-            return $select.find('option:selected').text();
+            return $select.$control.find('option:selected').text();
         };
         /**
          * Get state
@@ -62,7 +62,15 @@
          */
         $select.setState = function (stateJson) {
             $.each(stateJson, function (k, v) {
-                $select.attr(k, v);
+                if (v) {
+                    if (k == 'value') {
+                        $select.setValue(v);
+                    } else {
+                        $select.attr(k, v);
+                    }
+                } else {
+                    $select.removeAttr(k);
+                }
             });
             return $select;
         };
