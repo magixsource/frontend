@@ -92,10 +92,6 @@
                 return $.parseJSON(attributes);
             }
 
-            function getSettings() {
-                return settings;
-            }
-
             function render() {
                 if (settings.dialogType == 'alert') {
                     //$.dialog({content:settings.text});
