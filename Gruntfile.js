@@ -44,7 +44,19 @@ module.exports = function (grunt) {
                     }
                 ]
             }
-        }
+        },
+        compress:{
+            main:{
+                options:{
+                    archive:'release/<%= pkg.name %>-v<%= pkg.version%>.zip'
+                },
+                expand:true,
+                cwd:'release/',
+                src:['**/*']
+                // dest: 'dest/'
+            }
+        },
+        clean:["release/css", "release/img", "release/js"]
     });
 
     // Load Uglify
@@ -53,8 +65,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     // Load Copy
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     // Task list
-    grunt.registerTask('default', ['uglify', 'cssmin', 'copy']);
+    grunt.registerTask('default', ['uglify', 'cssmin', 'copy', 'compress', 'clean']);
 
 };
