@@ -1652,6 +1652,6 @@ return dialog;
 });
 
 
-window.dialog = require("dialog-plus");
+window.basalDialog = require("dialog-plus");
 
 })();
