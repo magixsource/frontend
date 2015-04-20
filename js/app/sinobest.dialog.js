@@ -95,7 +95,7 @@
             function render() {
                 if (settings.dialogType == 'alert') {
                     //$.dialog({content:settings.text});
-                    instance = dialog({
+                    instance = basalDialog({
                         content:settings.text,
                         zIndex:settings.zIndex,
                         width:settings.width,
@@ -107,7 +107,7 @@
                     $(instance.node).addClass(settings.className);
                     instance.show();
                 } else if (settings.dialogType == 'confirm') {
-                    instance = dialog({
+                    instance = basalDialog({
                         content:settings.text,
                         zIndex:settings.zIndex,
                         width:settings.width,
@@ -119,7 +119,7 @@
                     });
                     instance.show();
                 } else if (settings.dialogType == 'message') {
-                    instance = dialog({
+                    instance = basalDialog({
                         zIndex:settings.zIndex,
                         content:settings.text,
                         width:settings.width,
@@ -141,7 +141,7 @@
                         content = $("#" + settings.containerId).html();
                     }
 
-                    instance = dialog({
+                    instance = basalDialog({
                         title:settings.title,
                         zIndex:settings.zIndex,
                         content:content,
@@ -160,7 +160,7 @@
                         content = $("#" + settings.containerId).html();
                     }
 
-                    instance = dialog({
+                    instance = basalDialog({
                         title:settings.title,
                         zIndex:settings.zIndex,
                         content:content,
