@@ -15,7 +15,8 @@
         data:null,
         url:null,
         multiple:false,
-        onChange:null
+        onChange:null,
+        callback:null // 验证方法回调
     };
 
     $.fn.sbselect = function (options) {
@@ -111,6 +112,27 @@
         };
 
         /**
+         * Validate
+         */
+        $select.validate = function () {
+            var isFunc = $.isFunction(settings.callback);
+            if (isFunc) {
+                return settings.callback();
+            } else {
+                var v = $select.getValue();
+                var isOk = false;
+
+                if (settings.required) {
+                    isOk = $.sbvalidator.required($select.$control[0], v);
+                    if (!isOk) {
+                        return "不能为空";
+                    }
+                }
+                return ""; //验证通过
+            }
+        };
+
+        /**
          * As you see for build option
          */
         function buildOption() {
@@ -167,11 +189,23 @@
                 // data reload
                 buildOption($select.settings.data);
             } else {
-                // getJson for only one time
-                $.getJSON($select.settings.url, function (data) {
-                    $select.settings.data = data;
-                    clearOption();
-                    buildOption($select.settings.data);
+                // same as getJSON
+                $.ajax({type:"get",
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"json",
+                    url:$select.settings.url,
+                    success:function (data) {
+                        $select.settings.data = data;
+                        clearOption();
+                        buildOption($select.settings.data);
+                    },
+                    error:function (XMLHttpRequest, textStatus, errorThrown) {
+                        var e = new Object();
+                        e.code = textStatus;
+                        e.msg = "无法请求获取数据，请求地址：" + this.url;
+                        // 根据规范要求将错误交给全局函数处理
+                        $.fn.sberror.onerror(e);
+                    }
                 });
             }
 
