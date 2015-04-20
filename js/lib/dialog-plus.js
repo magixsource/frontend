@@ -253,6 +253,12 @@ $.extend(Popup.prototype, {
     
         return this;
     },
+    /**
+     * 保持打开状态
+     */
+    keepOpen:function(){
+        return false;
+    },
 
 
     /** 销毁浮层 */
