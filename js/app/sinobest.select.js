@@ -110,9 +110,9 @@
             return $select;
         };
         /**
-         * Destory select
+         * Destroy select
          */
-        $select.destory = function () {
+        $select.destroy = function () {
             return  $select.remove();
         };
 

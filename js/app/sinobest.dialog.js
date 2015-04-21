@@ -73,7 +73,10 @@
                 }
             };
 
-            this.destory = function () {
+            /**
+             * 销毁方法
+             */
+            this.destroy = function () {
                 instance.remove();
             };
 

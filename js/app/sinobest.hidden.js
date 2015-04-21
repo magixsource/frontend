@@ -73,9 +73,9 @@
         };
 
         /**
-         * Destory
+         * Destroy
          */
-        $input.destory = function () {
+        $input.destroy = function () {
             return  $input.remove();
         };
 
