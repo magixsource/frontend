@@ -67,6 +67,11 @@
                     if (k == 'value') {
                         $select.setValue(v);
                     } else {
+                        if (k == 'required') {
+                            $select.settings.required = v;
+                        } else if (k == 'readonly') {
+                            $select.settings.readonly = v;
+                        }
                         $select.attr(k, v);
                     }
                 } else {
