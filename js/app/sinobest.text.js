@@ -110,7 +110,7 @@
                 var v = $input.getValue();
 
                 var isOk = false;
-                if (settings.required) {
+                if (settings.required || $input.attr("required")) {
                     isOk = $.sbvalidator.required($input[0], v);
                     if (!isOk) {
                         return "不能为空";
