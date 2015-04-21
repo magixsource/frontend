@@ -157,6 +157,21 @@
                 });
                 $select.$control.append(option);
             });
+
+            addEventListener();
+        };
+
+        /**
+         * Init value and add Event Listener
+         * 因为有可能数据是异步加载过来的，所以初始化监听之类的操作，建议放在BuildOption之后
+         */
+        function addEventListener() {
+            if ($select.settings.value) {
+                $select.setValue($select.settings.value);
+            }
+            if ($select.settings.onChange) {
+                $select.$control.on('change', $select.settings.onChange);
+            }
         };
 
         function clearOption() {
@@ -214,12 +229,6 @@
                 });
             }
 
-            if ($select.settings.value) {
-                $select.val($select.settings.value);
-            }
-            if ($select.settings.onChange) {
-                $select.on('change', $select.settings.onChange);
-            }
 
             return $select;
         }
