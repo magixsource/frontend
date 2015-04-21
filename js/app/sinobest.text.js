@@ -97,9 +97,9 @@
             return $input;
         };
         /**
-         * Destory text
+         * Destroy text
          */
-        $input.destory = function () {
+        $input.destroy = function () {
             return  $input.remove();
         };
 
