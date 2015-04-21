@@ -1,3 +1,4 @@
+//TODO data及url以及validate()未实现
 (function ($) {
     var defaults = {
         className:"sinobest-radio", //CSS类名
@@ -5,6 +6,11 @@
         readonly:false,
         direction:'line', //row、table
         columnCount:null,
+        data:null, // [{"code":"male","detail":"Male"},{"code":"female","detail":"Female"}]
+        url:null,
+        valueField:"code",
+        labelField:"detail",
+        callback:null, //验证回调函数名
         value:""
     };
 
@@ -49,6 +55,9 @@
         $radio.destory = function () {
             $radio.remove();
             $radio.next("label").remove();
+        };
+
+        $radio.validate = function () {
         };
 
         function render() {
