@@ -5,6 +5,13 @@
         readonly:false,
         direction:'line', //row、table
         columnCount:null,
+        delimiter:null, // 分隔符、若为空则返回数组
+        name:null,
+        valueField:"code",
+        labelField:"detail",
+        data:null,
+        url:null,
+        callback:null,
         value:""
     };
 
@@ -60,6 +67,9 @@
         $checkbox.destory = function () {
             $checkbox.remove();
             $checkbox.next("label").remove();
+        };
+        $checkbox.validate = function () {
+
         };
 
         function render() {
