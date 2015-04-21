@@ -4,6 +4,7 @@
             var defaults = {
                 containerId:null,
                 content:null, // 设置content之后，会覆盖container的内容
+                url:null, // 页面地址
                 className:"sinobest-dialog", //CSS类名
                 dialogType:"dialog",
                 text:"",
@@ -137,40 +138,53 @@
                     }
 
                 } else if (settings.dialogType == 'modal') {
-                    var content = null;
-                    if (settings.content) {
-                        content = settings.content;
-                    } else {
-                        content = $("#" + settings.containerId).html();
-                    }
-
-                    instance = basalDialog({
+                    var json = {
                         title:settings.title,
                         zIndex:settings.zIndex,
-                        content:content,
                         width:settings.width,
                         height:settings.height,
                         button:settings.button
-                    });
+                    };
+                    // 判断是否iframe弹出
+                    if (settings.url) {
+                        json = $.extend({}, json, {url:settings.url});
+                    } else {
+                        var content = null;
+                        // 是否自定义弹出内容
+                        if (settings.content) {
+                            content = settings.content;
+                        } else {
+                            // DOM容器
+                            content = $("#" + settings.containerId).html();
+                        }
+                        json = $.extend({}, json, {content:content});
+                    }
+
+                    instance = basalDialog(json);
                     $(instance.node).addClass(settings.className);
                     instance.showModal();
                 } else {
                     // handle as dialog
-                    var content = null;
-                    if (settings.content) {
-                        content = settings.content;
-                    } else {
-                        content = $("#" + settings.containerId).html();
-                    }
-
-                    instance = basalDialog({
+                    var json = {
                         title:settings.title,
                         zIndex:settings.zIndex,
-                        content:content,
                         width:settings.width,
                         height:settings.height,
                         button:settings.button
-                    });
+                    };
+                    if (settings.url) {
+                        json = $.extend({}, json, {url:settings.url});
+                    } else {
+                        var content = null;
+                        if (settings.content) {
+                            content = settings.content;
+                        } else {
+                            content = $("#" + settings.containerId).html();
+                        }
+                        json = $.extend({}, json, {content:content});
+                    }
+
+                    instance = basalDialog(json);
                     $(instance.node).addClass(settings.className);
                     instance.show();
                 }
