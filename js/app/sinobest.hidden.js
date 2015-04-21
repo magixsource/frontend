@@ -43,7 +43,15 @@
          */
         $input.setState = function (stateJson) {
             $.each(stateJson, function (k, v) {
-                $input.attr(k, v);
+                if (v) {
+                    if (k == 'value') {
+                        $input.val(v);
+                    } else {
+                        $input.attr(k, v);
+                    }
+                } else {
+                    $input.removeAttr(k);
+                }
             });
             return $input;
         };
