@@ -54,6 +54,11 @@
                     if (k == 'value') {
                         $input.val(v);
                     } else {
+                        if (k == 'required') {
+                            $input.settings.required = v;
+                        } else if (k == 'readonly') {
+                            $input.settings.readonly = v;
+                        }
                         $input.attr(k, v);
                     }
                 } else {
@@ -110,7 +115,7 @@
                 var v = $input.getValue();
 
                 var isOk = false;
-                if (settings.required || $input.attr("required")) {
+                if (settings.required) {
                     isOk = $.sbvalidator.required($input[0], v);
                     if (!isOk) {
                         return "不能为空";
@@ -137,7 +142,6 @@
                 return ""; //验证通过
             }
         };
-
 
         /**
          * Init
@@ -181,13 +185,6 @@
 
         function isPlaceHolderSupported() {
             return ('placeholder' in document.createElement('input'));
-        }
-
-        /**
-         * Get runtime settings
-         */
-        function getSettings() {
-            return $input.settings;
         }
 
         /**
