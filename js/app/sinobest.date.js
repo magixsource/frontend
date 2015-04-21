@@ -14,6 +14,7 @@
         onpicking:null,
         onclearing:null,
         oncleared:null,
+        callback:null, //验证回调函数名
         value:""
     };
 
@@ -33,7 +34,15 @@
         };
         $date.setState = function (stateJson) {
             $.each(stateJson, function (k, v) {
-                $date.attr(k, v);
+                if (v) {
+                    if (k == 'value') {
+                        $date.val(v);
+                    } else {
+                        $date.attr(k, v);
+                    }
+                } else {
+                    $date.removeAttr(k);
+                }
             });
             return $date;
         };
@@ -52,6 +61,10 @@
         };
         $date.destory = function () {
             $date.remove();
+        };
+
+        $date.validate = function () {
+
         };
 
         function render() {
