@@ -1,5 +1,5 @@
 /**
- * Sinobest-Text 控件
+ * Sinobest-Text
  */
 (function ($) {
     var defaults = {

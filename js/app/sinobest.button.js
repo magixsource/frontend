@@ -1,5 +1,5 @@
 /**
- * Sinobest-Button 控件
+ * Sinobest-Button
  */
 (function ($) {
     var defaults = {

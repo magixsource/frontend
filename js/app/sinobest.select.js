@@ -1,5 +1,5 @@
 /**
- * Sinobest-Select 控件
+ * Sinobest-Select
  */
 (function ($) {
     var defaults = {

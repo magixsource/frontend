@@ -1,5 +1,5 @@
 /**
- * Sinobest-Hidden 控件
+ * Sinobest-Hidden
  */
 (function ($) {
     var defaults = {
