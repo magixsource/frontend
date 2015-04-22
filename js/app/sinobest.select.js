@@ -5,7 +5,7 @@
     var defaults = {
         className:"sinobest-select", //CSS类名
         required:false, // 是否必录
-        readonly:false,
+        disabled:false,
         allowEmptyOption:true,
         name:null,
         id:null,
@@ -69,8 +69,8 @@
                     } else {
                         if (k == 'required') {
                             $select.settings.required = v;
-                        } else if (k == 'readonly') {
-                            $select.settings.readonly = v;
+                        } else if (k == 'disabled') {
+                            $select.settings.disabled = v;
                         }
                         $select.attr(k, v);
                     }
@@ -200,8 +200,8 @@
             if ($select.settings.required) {
                 $select.$control.attr('required', $select.settings.required);
             }
-            if ($select.settings.readonly) {
-                $select.$control.attr('readonly', $select.settings.readonly);
+            if ($select.settings.disabled) {
+                $select.$control.attr('disabled', $select.settings.disabled);
             }
             if ($select.settings.data) {
                 // clear all option
