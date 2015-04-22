@@ -36,10 +36,11 @@
          * @return {*}
          */
         $radio.setValue = function (v) {
-            var currentValue = $radio.getValue();
-            // jq 1.6之后，用prop代替attr
-            $radio.find(":radio").filter('[value=' + currentValue + ']').prop('checked', false);
-            return $radio.find(":radio").filter('[value=' + v + ']').prop('checked', true);
+            $radio.find(":radio").filter(':checked').prop('checked', false);
+            if (v) {
+                $radio.find(":radio").filter('[value=' + v + ']').prop('checked', true);
+            }
+            return $radio;
         };
 
         /**
@@ -107,6 +108,10 @@
             $radio.remove();
         };
 
+        /**
+         * 验证函数
+         * @return {*}
+         */
         $radio.validate = function () {
             var isFunc = $.isFunction(settings.callback);
             if (isFunc) {
