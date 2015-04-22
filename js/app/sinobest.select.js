@@ -140,11 +140,11 @@
         /**
          * As you see for build option
          */
-        function buildOption() {
+        function buildOption(data) {
             if ($select.settings.allowEmptyOption) {
                 $select.$control.append("<option></option>");
             }
-            $.each($select.settings.data, function (idx, obj) {
+            $.each(data, function (idx, obj) {
                 var option = $("<option></option>");
                 $.each(obj, function (k, v) {
                     if (k == $select.settings.valueField) {
