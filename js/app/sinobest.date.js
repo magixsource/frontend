@@ -38,6 +38,11 @@
                     if (k == 'value') {
                         $date.val(v);
                     } else {
+                        if (k == 'required') {
+                            $date.settings.required = v;
+                        } else if (k == 'readonly') {
+                            $date.settings.readonly = v;
+                        }
                         $date.attr(k, v);
                     }
                 } else {
@@ -59,12 +64,26 @@
                 $date.hide();
             }
         };
-        $date.destory = function () {
+        $date.destroy = function () {
             $date.remove();
         };
 
         $date.validate = function () {
+            var isFunc = $.isFunction(settings.callback);
+            if (isFunc) {
+                return settings.callback();
+            } else {
+                var v = $date.getValue();
+                var isOk = false;
 
+                if (settings.required) {
+                    isOk = $.sbvalidator.required($date[0], v);
+                    if (!isOk) {
+                        return "不能为空";
+                    }
+                }
+                return ""; //验证通过
+            }
         };
 
         function render() {
@@ -76,7 +95,7 @@
                 $date.attr('required', settings.required);
             }
             if (settings.value) {
-                $date.val(settings.value);
+                $date.setValue(settings.value);
             }
             $date.on('click', function () {
                 var initJson = {
@@ -90,11 +109,15 @@
                     onclearing:settings.onclearing,
                     oncleared:settings.oncleared
                 };
+
                 if (settings.maxDate) {
                     initJson = $.extend({}, initJson, {maxDate:settings.maxDate});
                 }
                 if (settings.minDate) {
                     initJson = $.extend({}, initJson, {minDate:settings.minDate});
+                }
+                if (settings.readonly) {
+                    initJson = $.extend({}, initJson, {readOnly:settings.readonly});
                 }
 
                 WdatePicker(initJson);
