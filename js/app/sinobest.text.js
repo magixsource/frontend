@@ -118,25 +118,25 @@
                 if (settings.required) {
                     isOk = $.sbvalidator.required($input[0], v);
                     if (!isOk) {
-                        return "不能为空";
+                        return $.sbvalidator.TEXT_REQUIRED;
                     }
                 }
                 if (settings.minlength) {
                     isOk = $.sbvalidator.minlength($input[0], v, settings.minlength);
                     if (!isOk) {
-                        return "长度不能小于" + settings.minlength;
+                        return $.sbvalidator.TEXT_MIN_LENGTH + settings.minlength;
                     }
                 }
                 if (settings.maxlength) {
                     isOk = $.sbvalidator.maxlength($input[0], v, settings.maxlength);
                     if (!isOk) {
-                        return "长度不能大于" + settings.maxlength;
+                        return $.sbvalidator.TEXT_MAX_LENGTH + settings.maxlength;
                     }
                 }
                 if (settings.regex) {
                     isOk = $.sbvalidator.valid(settings.regex, v);
                     if (!isOk) {
-                        return "格式不正确";
+                        return $.sbvalidator.TEXT_REGEX;
                     }
                 }
                 return ""; //验证通过
