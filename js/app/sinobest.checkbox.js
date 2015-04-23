@@ -125,7 +125,7 @@
                 if (settings.required) {
                     isOk = $.sbvalidator.required($checkbox[0], v);
                     if (!isOk) {
-                        return "不能为空";
+                        return $.sbvalidator.TEXT_REQUIRED;
                     }
                 }
                 return ""; //验证通过
