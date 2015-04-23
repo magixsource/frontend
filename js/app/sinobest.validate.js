@@ -34,7 +34,10 @@
             return length < param;
         }, valid:function (regex, value) {
             return regex.test(value);
-        }
+        }, TEXT_REQUIRED:"\u4e0d\u80fd\u4e3a\u7a7a",
+        TEXT_MIN_LENGTH:"\u957f\u5ea6\u4e0d\u80fd\u5c0f\u4e8e",
+        TEXT_MAX_LENGTH:"\u957f\u5ea6\u4e0d\u80fd\u5927\u4e8e",
+        TEXT_REGEX:"\u683c\u5f0f\u4e0d\u6b63\u786e"
 
     });
 })(jQuery);
