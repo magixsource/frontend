@@ -7,7 +7,14 @@
         beginMaxDate:null,
         endMinDate:null,
         endMaxDate:null,
-        value:""
+        name:"",
+        id:"",
+        delimiter:null,
+        beginSuffix:"_begin",
+        endSuffix:"_end",
+        callback:null,
+        toChar:"\u81f3", // 至
+        value:[]//数组，有顺序
     };
 
     $.fn.sbdaterange = function (options) {
@@ -15,29 +22,142 @@
         var $daterange = this;
         $daterange.settings = settings;
 
+        /**
+         * Get value
+         */
         $daterange.getValue = function () {
+            var values = [$daterange.$begin.getValue(), $daterange.$end.getValue()];
+            if ($daterange.settings.delimiter) {
+                return values.join($daterange.settings.delimiter);
+            } else {
+                return values;
+            }
         };
-        $daterange.setValue = function () {
+        /**
+         * Set value
+         */
+        $daterange.setValue = function (array) {
+            if ($.isArray(array)) {
+                $daterange.$begin.setValue(array[0]);
+                $daterange.$end.setValue(array[1]);
+            }
+            return $daterange;
         };
+
+        /**
+         * DateRange state
+         * @return {*}
+         */
         $daterange.getState = function () {
+            return $.extend({}, getAttributes());
         };
-        $daterange.setState = function () {
+
+        /**
+         * Set DateRange state
+         * @param stateJson
+         * @return {*}
+         */
+        $daterange.setState = function (stateJson) {
+            $.each(stateJson, function (k, v) {
+                if (v) {
+                    if (k == 'value') {
+                        $daterange.setValue(v);
+                    } else {
+                        if (k == 'required') {
+                            $daterange.settings.required = v;
+                        } else if (k == 'readonly') {
+                            $daterange.settings.readonly = v;
+                        }
+                        $daterange.attr(k, v);
+                    }
+                } else {
+                    $daterange.removeAttr(k);
+                }
+            });
+            return $daterange;
         };
+        /**
+         * DOM object
+         */
         $daterange.getDom = function () {
+            return $daterange[0];
         };
+        /**
+         * Reload
+         */
         $daterange.reload = function () {
+            render();
         };
-        $daterange.display = function () {
+        /**
+         * Show or hide
+         * @param b
+         */
+        $daterange.display = function (b) {
+            if (b) {
+                $daterange.show();
+            } else {
+                $daterange.hide();
+            }
         };
-        $daterange.destory = function () {
+        /**
+         * Remove from memory
+         */
+        $daterange.destroy = function () {
             $daterange.remove();
         };
 
+        /**
+         * Validate
+         * @return {*}
+         */
+        $daterange.validate = function () {
+            var msgs = [$daterange.$begin.validate(), $daterange.$end.validate()];
+            if ($daterange.settings.delimiter) {
+                return msgs.join($daterange.settings.delimiter);
+            } else {
+                return msgs;
+            }
+        };
+
+        /**
+         * Build input element
+         */
+        function buildInput() {
+            var beginName = $daterange.settings.name + $daterange.settings.beginSuffix;
+            var endName = $daterange.settings.name + $daterange.settings.endSuffix;
+            var beginId = beginName;
+            var endId = endName;
+            var $container = $('<input type="text" name="' + beginName + '" id="' + beginId + '">' + $daterange.settings.toChar + '<input type="text" name="' + endName + '" id="' + endId + '">');
+            $daterange.append($container);
+        };
+
+        /**
+         * Get attributes
+         */
+        function getAttributes() {
+            var attributes = "{";
+            // DOM attributes
+            $.each($daterange[0].attributes, function (i, attr) {
+                if (i > 0) {
+                    attributes += ",";
+                }
+                attributes += ('"' + attr.name + '":"' + attr.value + '"');
+            });
+            attributes += "}";
+            return $.parseJSON(attributes);
+        }
+
+        /**
+         * Render function
+         */
         function render() {
+            $daterange.addClass($daterange.settings.className);
+            buildInput();
             var beginId;
-            $daterange.each(function (idx) {
+            $daterange.find("input").each(function (idx) {
                 if (idx == 0) {
-                    var beginSettings = settings;
+                    // 覆盖value
+                    var beginSettings = $.extend({}, $daterange.settings, {value:$daterange.settings.value[idx]});
 
                     if (settings.beginMinDate) {
                         beginSettings = $.extend({}, beginSettings, {minDate:settings.beginMinDate});
@@ -45,10 +165,11 @@
                     if (settings.beginMaxDate) {
                         beginSettings = $.extend({}, beginSettings, {maxDate:settings.beginMaxDate});
                     }
-                    $(this).sbdate(beginSettings);
+                    $daterange.$begin = $(this).sbdate(beginSettings);
                     beginId = $(this).attr('id');
                 } else {
-                    var endSettings = settings;
+                    var endSettings = $.extend({}, $daterange.settings, {value:$daterange.settings.value[idx]});
+
                     if (settings.endMinDate) {
                         endSettings = $.extend({}, endSettings, {minDate:settings.endMinDate});
                     } else {
@@ -57,14 +178,12 @@
                     if (settings.endMaxDate) {
                         endSettings = $.extend({}, endSettings, {maxDate:settings.endMaxDate});
                     }
-                    $(this).sbdate(endSettings);
+                    $daterange.$end = $(this).sbdate(endSettings);
                 }
             });
         }
 
-        //return this.each(function () {
         render();
-        //});
         return this;
     };
 })(jQuery);
