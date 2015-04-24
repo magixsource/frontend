@@ -3702,12 +3702,11 @@
 //                          }
                       },
                       error:function(XMLHttpRequest, textStatus, errorThrown){
-                          //console.log(textStatus+'======'+XMLHttpRequest+'======='+errorThrown);
                           var e = new Object();
-                          e.code = textStatus;
-                          e.msg = "无法请求获取数据，请求地址："+this.url;
+                          e.code = XMLHttpRequest.status;
+                          e.msg = $.sberror.format(e.code,this.url);
                           // 根据规范要求将错误交给全局函数处理
-                          $.fn.sberror.onerror(e);
+                          $.sberror.onError(e);
                       }
                   });
               };
