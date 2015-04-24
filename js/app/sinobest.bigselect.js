@@ -18,7 +18,10 @@
         onItemAdd:null,
         onItemRemove:null,
         plugins:null,
-        editEnable:false,//是否开启编辑模式
+        editEnable:false, //是否开启编辑模式
+        name:"",
+        id:"",
+        callback:null,
         value:null
     };
 
@@ -26,7 +29,7 @@
         var settings = $.extend({}, defaults, options || {});
         var $bigselect = this;
 
-        if(settings.saveType=="d"){
+        if (settings.saveType == "d") {
             settings.valueField = settings.labelField;
         }
         $bigselect.settings = settings;
@@ -56,7 +59,7 @@
             }
         };
 
-        $bigselect.getDetail = function(){
+        $bigselect.getDetail = function () {
             return control.getItems();
         };
 
@@ -82,9 +85,27 @@
                 control.$wrapper.hide();
             }
         };
-        $bigselect.destory = function () {
+        $bigselect.destroy = function () {
             $bigselect.remove();
             control.$wrapper.remove();
+        };
+
+        $bigselect.validate = function () {
+            var isFunc = $.isFunction(settings.callback);
+            if (isFunc) {
+                return settings.callback();
+            } else {
+                var v = $bigselect.getValue();
+                var isOk = false;
+
+                if (settings.required) {
+                    isOk = $.sbvalidator.required($bigselect[0], v);
+                    if (!isOk) {
+                        return $.sbvalidator.TEXT_REQUIRED;
+                    }
+                }
+                return ""; //验证通过
+            }
         };
 
         function getAttributes() {
@@ -100,8 +121,41 @@
             return $.parseJSON(attributes);
         }
 
+        /**
+         * Build Input when single or Select when multiple
+         */
+        function build() {
+            if (settings.type == 'multiple') {
+                buildSelect(true);
+                renderMultiple();
+            } else {
+                buildSelect(false);
+                renderSingle();
+            }
+        }
+
+        function buildSelect(multiple) {
+            var $select = $('<select id="' + settings.id + '" name="' + settings.name + '"></select>');
+            if(multiple){
+                $select.attr("multiple",true);
+            }
+            if (settings.required) {
+                $select.attr("required", settings.required);
+            }
+            $bigselect.append($select);
+        }
+
+        function buildInput() {
+            var $input = $('<input type="text" name="' + settings.name + '" id="' + settings.id + '">');
+            if (settings.required) {
+                $input.attr("required", settings.required);
+            }
+            $bigselect.append($input);
+        }
+
         function render() {
             $bigselect.addClass(settings.className);
+
 
             if (settings.paging == "true") {
                 settings.plugins = new Object();
@@ -113,17 +167,14 @@
             if (typeof settings.plugins == 'undefined') {
                 settings.plugins = new Object();
             }
-            if (settings.type == 'multiple') {
-                renderMultiple();
-            } else {
-                renderSingle();
-            }
 
-            var persist = test(settings.persist, true);
-            var create = test(settings.create, false);
+            build();
+
+            var persist = safeSet(settings.persist, true);
+            var create = safeSet(settings.create, false);
 
             // 声明
-            $select = $($bigselect.selector).selectize({
+            $select = $($bigselect.selector).find('[name="'+settings.name+'"]').selectize({
                 valueField:settings.valueField,
                 labelField:settings.labelField,
                 searchField:settings.searchField,
@@ -150,13 +201,19 @@
                 initValue = eval("(" + initValue + ")");
                 $bigselect.setValue(initValue);
             }
-            if (settings.required) {
-                $bigselect.attr('required', settings.required);
-            }
+//            if (settings.required) {
+//                $bigselect.attr('required', settings.required);
+//            }
         }
 
-        function test(v, d) {
-            if (null == v) {
+        /**
+         * Safe setter,return default value when v equals null or undefined
+         * @param v
+         * @param d
+         * @return {*}
+         */
+        function safeSet(v, d) {
+            if (!v) {
                 return d;
             }
             return v;
