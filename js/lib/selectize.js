@@ -1642,6 +1642,7 @@
 			self.isFocused = false;
 			if (self.ignoreFocus) return;
 
+
 			// necessary to prevent IE closing the dropdown when the scrollbar is clicked
 			if (!self.ignoreBlur && document.activeElement === self.$dropdown_content[0]) {
 				self.ignoreBlur = true;
@@ -3989,6 +3990,43 @@
             })();
 
         });
+
+	/**
+	 * smart_icon:show down arrow when value is empty
+	 */
+	Selectize.define('smart_icon',function(options){
+		var self = this;
+		var html = '<span class="selectize-icon"></span>';
+
+		this.setup = (function(){
+			var original = self.setup;
+			return function(){
+				original.apply(this, arguments);
+				// add HTML
+				this.$control.append(html);
+			};
+		})();
+
+		/**
+		 * Override refreshState
+		 */
+		this.refreshState = (function(){
+			var original = self.refreshState;
+			return function(){
+				original.apply(this, arguments);
+				// hide when value is empty
+				if(!this.getValue() || this.getValue().length ==0 ){
+					this.$control.find('.selectize-icon').show();
+				}else{
+					this.$control.find('.selectize-icon').hide();
+				}
+			};
+		})();
+
+	});
+
+
+
 
 	return Selectize;
 }));
