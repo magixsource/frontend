@@ -302,8 +302,8 @@
 .selectize-icon{
   background-image: url("../img/arrow_9_5.gif");
   background-repeat: no-repeat;
-  width: 9px;
-  height: 5px;
+  width: 10px;
+  height: 10px;
   display: block;
   position: absolute;
   top: 50%;
