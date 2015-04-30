@@ -70,3 +70,6 @@
   -moz-border-radius: 0 0 3px 3px;
   border-radius: 0 0 3px 3px;
 }
+.selectize-control .selectize-input{
+	width:95%;
+}
