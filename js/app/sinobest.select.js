@@ -15,6 +15,7 @@
         data:null,
         url:null,
         multiple:false,
+        size:null,
         onChange:null,
         callback:null // 验证方法回调
     };
@@ -184,6 +185,9 @@
         function render() {
             if ($select.settings.multiple) {
                 $select.html('<select multiple></select>');
+                if($select.settings.size){
+                    $select.find("select").attr("size",$select.settings.size);
+                }
             } else {
                 $select.html('<select></select>');
             }
