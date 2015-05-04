@@ -8,6 +8,7 @@
         minlength:null,
         maxlength:null,
         placeholder:"",
+        disabled:null,
         readonly:false,
         regex:null,
         callback:null,
@@ -58,6 +59,14 @@
                             $input.settings.required = v;
                         } else if (k == 'readonly') {
                             $input.settings.readonly = v;
+                        } else if(k == 'disabled'){
+                            $input.settings.disabled = v;
+                            if(v){
+                                toggleDisabledClass(true);
+                            }else{
+                                toggleDisabledClass(false);
+                            }
+
                         }
                         $input.attr(k, v);
                     }
@@ -161,10 +170,25 @@
             if ($input.settings.readonly) {
                 $input.attr('readonly', 'readonly');
             }
+            if ($input.settings.disabled) {
+                $input.attr('disabled', 'disabled');
+                toggleDisabledClass(true);
+            }
             if ($input.settings.value) {
                 $input.val($input.settings.value);
             }
             return $input;
+        }
+
+        /**
+         * enabled or disabled class
+         */
+        function toggleDisabledClass(flag){
+            if(flag){
+                $input.addClass('input-disabled');
+            }else{
+                $input.removeClass('input-disabled');
+            }
         }
 
         /**
