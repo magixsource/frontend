@@ -1669,6 +1669,34 @@
 			self.setCaret(self.items.length);
 			self.refreshState();
 		},
+		/**
+		 * 将items转为option,在smart_tag中有用到
+		 * @param isSetValue 是否需要设置值
+		 */
+		converItemsToOption:function(isSetValue){
+			var self = this;
+			// 已选中的
+			var items = self.getItems();
+
+			// 正在操作的
+			var current = self.cloneValue;
+			if(current){
+				// 合并到items中
+				items = items.concat([current]);
+			}
+			// 替换新值
+			$.each(items,function(idx,item){
+				self.addOption({
+					"code":item,
+					"detail":item
+				});
+			});
+
+			// 是否设置显示值开关
+			if(isSetValue && current){
+				self.addItem(current);
+			}
+		},
 
 		/**
 		 * Triggered when the user rolls over
@@ -1702,6 +1730,16 @@
 				self.createItem();
 			} else {
 				value = $target.attr('data-value');
+				// hack for 'smart tag' add by linpeng 2015-04-29
+				if(self.plugins.names.indexOf('smart_tag')!=-1){
+					value = $target.text();
+					// add option
+					self.addOption({
+						code:value,
+						detail:value
+					});
+					//self.setTextboxValue("");
+				}
 				if (typeof value !== 'undefined') {
 					self.lastQuery = null;
                     // determine clear or keep input query text (modify by linpeng 2014-8-20)
@@ -3688,9 +3726,21 @@
                           $('#'+self.$input.context.id+'_paging_current_page').html(self.$pagination.current_page);
 
                           self.clearOptions();
-                          $.each(res.data,function(i){
-                              self.addOption(res.data[i]);
-                          });
+						  $.each(res.data,function(i){
+							  self.addOption(res.data[i]);
+						  });
+
+						  // refresh state add by linpeng 2015-04-29
+						  //self.refreshState();
+						  if(self.plugins.names.indexOf('smart_tag')!=-1){
+							  $.each(self.getItems(),function(idx,item){
+								  self.addOption({
+									  code:item,
+									  detail:item
+								  });
+							  });
+						  }
+
                           self.refreshOptions(false);
                           self.positionDropdown();
                           self.isKeepInputValue = false;
@@ -4022,11 +4072,58 @@
 				}
 			};
 		})();
-
 	});
 
+	/**
+	 * 标签插件，常用于文章打标记，例如Stackoverflow中的tag input
+	 */
+	Selectize.define('smart_tag', function(options) {
+		var self = this;
 
+		options.text = options.text || function(option) {
+			return option[this.settings.labelField];
+		};
 
+		this.onKeyDown = (function(e) {
+			var original = self.onKeyDown;
+			return function(e) {
+				var index, option;
+				if (e.keyCode === KEY_BACKSPACE && this.$control_input.val() === '' && !this.$activeItems.length) {
+					index = this.caretPos - 1;
+					if (index >= 0 && index < this.items.length) {
+						option = this.options[this.items[index]];
+						if (this.deleteSelection(e)) {
+							this.setTextboxValue(options.text.apply(this, [option]));
+							this.refreshOptions(true);
+						}
+						e.preventDefault();
+						return;
+					}
+				}
+				if(e.keyCode === KEY_RETURN && this.$control_input.val().length > 0){
+					e.preventDefault();
+
+					self.lastQuery = null;
+					self.cloneValue = self.$control_input.val();
+					self.setTextboxValue("");
+					self.converItemsToOption(true);
+
+					return;
+				}
+				return original.apply(this, arguments);
+			};
+		})();
+
+		//this.refreshState = (function(){
+		//	var original = self.refreshState;
+		//	return function(){
+		//		original.apply(this, arguments);
+        //
+		//
+        //
+		//	};
+		//})();
+	});
 
 	return Selectize;
 }));
