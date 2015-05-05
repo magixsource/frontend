@@ -1,0 +1,21 @@
+/** try to resolve some diff between chorme and IE */
+.input-disabled {
+    background-color: rgb(235, 235, 228);
+    color: rgb(84, 84, 84);
+}
+
+.select-disabled {
+    background-color: rgb(235, 235, 228);
+    color: rgb(84, 84, 84);
+}
+
+.select-disabled .option-selected {
+    color:gray;
+    background-color: lightgray;
+}
+
+.select-disabled .multiple-option-selected {
+    color:gray;
+    background-color: darkgray;
+}
+
