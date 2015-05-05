@@ -39,7 +39,14 @@
          * @return object
          */
         $select.setValue = function (value) {
-            return $select.$control.val(value);
+            $select.$control.val(value);
+            // disabled Hack
+            if($select.settings.disabled && ($select.settings.multiple || $select.settings.size)){
+                // option.addClass('option-selected');
+                $select.$control.find("option").not(":selected").removeClass("option-selected");
+                $select.$control.find("option:selected").addClass("option-selected");
+            }
+            return $select;
         };
 
         /**
@@ -72,6 +79,11 @@
                             $select.settings.required = v;
                         } else if (k == 'disabled') {
                             $select.settings.disabled = v;
+                            if(v){
+                                toggleDisabledClass(true);
+                            }else{
+                                toggleDisabledClass(false);
+                            }
                         }
                         $select.attr(k, v);
                     }
@@ -137,6 +149,17 @@
                 return ""; //验证通过
             }
         };
+
+        /**
+         * enabled or disabled class
+         */
+        function toggleDisabledClass(flag){
+            if(flag){
+                $select.$control.addClass('select-disabled');
+            }else{
+                $select.$control.removeClass('select-disabled');
+            }
+        }
 
         /**
          * As you see for build option
@@ -206,6 +229,7 @@
             }
             if ($select.settings.disabled) {
                 $select.$control.attr('disabled', $select.settings.disabled);
+                toggleDisabledClass(true);
             }
             if ($select.settings.data) {
                 // clear all option
