@@ -132,6 +132,16 @@
                 buildSelect(false);
                 renderSingle();
             }
+            if(settings.editEnable){
+                settings.createOnBlur = true;
+                settings.keepTextOnBlur = true;
+                settings.plugins['smart_tag'] = {
+                };
+            }
+            // selectize-icon
+            settings.plugins['smart_icon'] = {
+
+            };
         }
 
         function buildSelect(multiple) {
@@ -172,6 +182,8 @@
 
             var persist = safeSet(settings.persist, true);
             var create = safeSet(settings.create, false);
+            var createOnBlur = safeSet(settings.createOnBlur, false);
+            var keepTextOnBlur = safeSet(settings.keepTextOnBlur,false);
 
             // 声明
             $select = $($bigselect.selector).find('[name="'+settings.name+'"]').selectize({
@@ -181,6 +193,8 @@
                 options:[],
                 persist:persist,
                 create:create,
+                createOnBlur:createOnBlur,
+                keepTextOnBlur:keepTextOnBlur,
                 onItemAdd:settings.onItemAdd,
                 onItemRemove:settings.onItemRemove,
                 plugins:settings.plugins
