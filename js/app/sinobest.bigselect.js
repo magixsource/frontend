@@ -1,33 +1,37 @@
 (function ($) {
     var defaults = {
-        className:"sinobest-bigselect", //CSS类名
-        required:false, // 是否必录
-        readonly:false,
-        disabled:false,
-        url:null,
-        saveType:"c", //d
-        type:'single', // multiple
-        pageSize:10,
-        paging:null,
-        valueField:"code",
-        labelField:"detail",
-        searchField:["detail"],
-        options:[],
-        persist:null,
-        create:null,
-        onItemAdd:null,
-        onItemRemove:null,
-        plugins:null,
-        editEnable:false, //是否开启编辑模式
-        name:"",
-        id:"",
-        callback:null,
-        value:null
+        className: "sinobest-bigselect", //CSS类名
+        required: false, // 是否必录
+        readonly: false,
+        disabled: false,
+        url: null,
+        saveType: "c", //d
+        type: 'single', // multiple
+        pageSize: 10,
+        paging: null,
+        valueField: "code",
+        labelField: "detail",
+        searchField: ["detail"],
+        options: [],
+        persist: null,
+        create: null,
+        onItemAdd: null,
+        onItemRemove: null,
+        plugins: null,
+        editEnable: false, //是否开启编辑模式
+        name: "",
+        id: "",
+        callback: null,
+        value: null
     };
 
     $.fn.sbbigselect = function (options) {
         var settings = $.extend({}, defaults, options || {});
         var $bigselect = this;
+        if (settings.editEnable) {
+            // 编辑模式强制saveType为detail
+            settings.saveType = "d";
+        }
 
         if (settings.saveType == "d") {
             settings.valueField = settings.labelField;
@@ -52,8 +56,8 @@
             for (var i = 0; i < v.length; i++) {
                 var item = v[i];
                 control.addOption({
-                    "code":item[key],
-                    "detail":item[label]
+                    "code": item[key],
+                    "detail": item[label]
                 });
                 control.addItem(item[key]);
             }
@@ -66,18 +70,22 @@
         $bigselect.getState = function () {
             return $.extend({}, getAttributes());
         };
+
         $bigselect.setState = function (stateJson) {
             $.each(stateJson, function (k, v) {
                 control.$wrapper.attr(k, v);
             });
             return $bigselect;
         };
+
         $bigselect.getDom = function () {
             return control.$wrapper[0];
         };
+
         $bigselect.reload = function () {
             render();
         };
+
         $bigselect.display = function (b) {
             if (b) {
                 control.$wrapper.show();
@@ -85,6 +93,7 @@
                 control.$wrapper.hide();
             }
         };
+
         $bigselect.destroy = function () {
             $bigselect.remove();
             control.$wrapper.remove();
@@ -132,22 +141,19 @@
                 buildSelect(false);
                 renderSingle();
             }
-            if(settings.editEnable){
+            if (settings.editEnable) {
                 settings.createOnBlur = true;
                 settings.keepTextOnBlur = true;
-                settings.plugins['smart_tag'] = {
-                };
+                settings.plugins['smart_tag'] = {};
             }
             // selectize-icon
-            settings.plugins['smart_icon'] = {
-
-            };
+            settings.plugins['smart_icon'] = {};
         }
 
         function buildSelect(multiple) {
             var $select = $('<select id="' + settings.id + '" name="' + settings.name + '"></select>');
-            if(multiple){
-                $select.attr("multiple",true);
+            if (multiple) {
+                $select.attr("multiple", true);
             }
             if (settings.required) {
                 $select.attr("required", settings.required);
@@ -166,12 +172,11 @@
         function render() {
             $bigselect.addClass(settings.className);
 
-
             if (settings.paging == "true") {
                 settings.plugins = new Object();
                 settings.plugins['paging_footer'] = {
-                    url:settings.url,
-                    pagesize:settings.pageSize
+                    url: settings.url,
+                    pagesize: settings.pageSize
                 };
             }
             if (typeof settings.plugins == 'undefined') {
@@ -183,21 +188,21 @@
             var persist = safeSet(settings.persist, true);
             var create = safeSet(settings.create, false);
             var createOnBlur = safeSet(settings.createOnBlur, false);
-            var keepTextOnBlur = safeSet(settings.keepTextOnBlur,false);
+            var keepTextOnBlur = safeSet(settings.keepTextOnBlur, false);
 
             // 声明
-            $select = $($bigselect.selector).find('[name="'+settings.name+'"]').selectize({
-                valueField:settings.valueField,
-                labelField:settings.labelField,
-                searchField:settings.searchField,
-                options:[],
-                persist:persist,
-                create:create,
-                createOnBlur:createOnBlur,
-                keepTextOnBlur:keepTextOnBlur,
-                onItemAdd:settings.onItemAdd,
-                onItemRemove:settings.onItemRemove,
-                plugins:settings.plugins
+            $select = $($bigselect.selector).find('[name="' + settings.name + '"]').selectize({
+                valueField: settings.valueField,
+                labelField: settings.labelField,
+                searchField: settings.searchField,
+                options: [],
+                persist: persist,
+                create: create,
+                createOnBlur: createOnBlur,
+                keepTextOnBlur: keepTextOnBlur,
+                onItemAdd: settings.onItemAdd,
+                onItemRemove: settings.onItemRemove,
+                plugins: settings.plugins
             });
             control = $select[0].selectize;
 
@@ -236,9 +241,9 @@
         function renderSingle() {
             // for single mode
             settings.plugins['single_clear_button'] = {
-                className:'clearSelection',
-                label:'',
-                title:''
+                className: 'clearSelection',
+                label: '',
+                title: ''
             };
         };
         function renderMultiple() {
