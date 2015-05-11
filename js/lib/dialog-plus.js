@@ -883,6 +883,19 @@ var artDialog = function (options, ok, cancel) {
         options.button = [];
     }
 
+    // 确定按钮
+    if (ok !== undefined) {
+        options.ok = ok;
+    }
+
+    if (options.ok) {
+        options.button.push({
+            id: 'ok',
+            value: options.okValue,
+            callback: options.ok,
+            autofocus: true
+        });
+    }
 
     // 取消按钮
     if (cancel !== undefined) {
@@ -897,22 +910,6 @@ var artDialog = function (options, ok, cancel) {
             display: options.cancelDisplay
         });
     }
-    
-    
-    // 确定按钮
-    if (ok !== undefined) {
-        options.ok = ok;
-    }
-    
-    if (options.ok) {
-        options.button.push({
-            id: 'ok',
-            value: options.okValue,
-            callback: options.ok,
-            autofocus: true
-        });
-    }
-    
 
     return artDialog.list[id] = new artDialog.create(options);
 };
