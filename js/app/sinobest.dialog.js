@@ -14,7 +14,7 @@
                 title:null,
                 okValue:"确定",
                 cancelValue:"取消",
-                onClick:function () {
+                onOK:function () {
                 },
                 onCancel:null,
                 button:null// 自定义按钮
@@ -106,7 +106,7 @@
                         height:settings.height,
                         cancel:false,
                         okValue:settings.okValue,
-                        ok:settings.onClick
+                        ok:settings.onOK
                     });
                     $(instance.node).addClass(settings.className);
                     instance.show();
@@ -117,7 +117,7 @@
                         width:settings.width,
                         height:settings.height,
                         okValue:settings.okValue,
-                        ok:settings.onClick,
+                        ok:settings.onOK,
                         cancelValue:settings.cancelValue,
                         cancel:settings.onCancel
                     });
