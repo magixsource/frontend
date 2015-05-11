@@ -3,18 +3,18 @@
  */
 (function ($) {
     var defaults = {
-        className:"sinobest-radio", //CSS类名
-        required:false, // 是否必录
-        disabled:false,
-        name:"",
-        direction:'line', //row、table
-        columnCount:null,
-        data:null, // [{"code":"male","detail":"Male"},{"code":"female","detail":"Female"}]
-        url:null,
-        valueField:"code",
-        labelField:"detail",
-        callback:null, //验证回调函数名
-        value:""
+        className: "sinobest-radio", //CSS类名
+        required: false, // 是否必录
+        disabled: false,
+        name: null,
+        direction: 'line', //row、table
+        columnCount: null,
+        data: null, // [{"code":"male","detail":"Male"},{"code":"female","detail":"Female"}]
+        url: null,
+        valueField: "code",
+        labelField: "detail",
+        callback: null, //验证回调函数名
+        value: ""
     };
 
     $.fn.sbradio = function (options) {
@@ -211,24 +211,26 @@
         function render() {
             // 样式
             $radio.addClass(settings.className);
+
             if ($radio.settings.required) {
                 $radio.attr('required', settings.required);
             }
             if ($radio.settings.url) {
                 // 异步-Remote url
-                $.ajax({type:"get",
-                    contentType:"application/json; charset=utf-8",
-                    dataType:"json",
-                    url:$radio.settings.url,
-                    success:function (data) {
+                $.ajax({
+                    type: "get",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    url: $radio.settings.url,
+                    success: function (data) {
                         $radio.settings.data = data;
                         clearRadio();
                         buildRadio($radio.settings.data);
                     },
-                    error:function (XMLHttpRequest, textStatus, errorThrown) {
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
                         var e = new Object();
                         e.code = XMLHttpRequest.status;
-                        e.msg = $.sberror.format(e.code,this.url);
+                        e.msg = $.sberror.format(e.code, this.url);
                         // 根据规范要求将错误交给全局函数处理
                         $.sberror.onError(e);
                     }
