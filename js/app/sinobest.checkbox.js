@@ -1,18 +1,18 @@
 (function ($) {
     var defaults = {
-        className:"sinobest-checkbox", //CSS类名
-        required:false, // 是否必录
-        disabled:false,
-        direction:'line', //row、table
-        columnCount:null,
-        delimiter:null, // 分隔符、若为空则返回数组
-        name:null,
-        valueField:"code",
-        labelField:"detail",
-        data:null,
-        url:null,
-        callback:null,
-        value:""
+        className: "sinobest-checkbox", //CSS类名
+        required: false, // 是否必录
+        disabled: false,
+        direction: 'line', //row、table
+        columnCount: null,
+        delimiter: null, // 分隔符、若为空则返回数组
+        name: null,
+        valueField: "code",
+        labelField: "detail",
+        data: null,
+        url: null,
+        callback: null,
+        value: ""
     };
 
     $.fn.sbcheckbox = function (options) {
@@ -34,6 +34,23 @@
                 return chkValue.join($checkbox.settings.delimiter);
             } else {
                 return chkValue;
+            }
+        };
+
+        /**
+         * 获取选中项的文字描述
+         * @returns {*}
+         */
+        $checkbox.getDetail = function () {
+            var chkDetail = [];
+            $checkbox.find(":checkbox").filter(':checked').each(function () {
+                chkDetail.push($(this).next("label").text());
+            });
+            if ($checkbox.settings.delimiter) {
+                // 按分隔符
+                return chkDetail.join($checkbox.settings.delimiter);
+            } else {
+                return chkDetail;
             }
         };
 
@@ -211,16 +228,17 @@
             }
 
             if ($checkbox.settings.url) {
-                $.ajax({type:"get",
-                    contentType:"application/json; charset=utf-8",
-                    dataType:"json",
-                    url:$checkbox.settings.url,
-                    success:function (data) {
+                $.ajax({
+                    type: "get",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    url: $checkbox.settings.url,
+                    success: function (data) {
                         $checkbox.settings.data = data;
                         clearCheckbox();
                         buildCheckbox($checkbox.settings.data);
                     },
-                    error:function (XMLHttpRequest, textStatus, errorThrown) {
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
                         var e = new Object();
                         e.code = XMLHttpRequest.status;
                         e.msg = $.sberror.format(e.code, this.url);
