@@ -120,7 +120,7 @@
     width: 7px;
     height: 5px;
     overflow: hidden;
-    background: url("../img/20130606B.png") no-repeat -76px -34px;
+    background: url("../img/gray_arrow.png") no-repeat -76px -34px;
     opacity: .5;
     filter: alpha(opacity=50)
 }
@@ -165,7 +165,7 @@
     cursor: pointer;
     width: 17px;
     height: 17px;
-    background: url("../img/20120418.png") no-repeat -40px 0;
+    background: url("../img/top_right_close.png") no-repeat -40px 0;
 }
 
 .areaselect-input {
