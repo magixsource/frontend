@@ -3,10 +3,10 @@
  */
 (function ($) {
     var defaults = {
-        className:"sinobest-button", //CSS类名
-        disabled:false,
-        value:"",
-        onClick:null
+        className: "sinobest-button", //CSS类名
+        disabled: false,
+        value: "",
+        onClick: null
     };
 
     $.fn.sbbutton = function (options) {
@@ -82,7 +82,7 @@
          * Destroy
          */
         $input.destroy = function () {
-            return  $input.remove();
+            return $input.remove();
         };
 
         /**
@@ -98,7 +98,7 @@
                 $input.val($input.settings.value);
             }
             if ($input.settings.onClick) {
-                $input.on("click", $input.settings.onClick);
+                $input.off('click').on("click", $input.settings.onClick);
             }
             return $input;
         }
