@@ -194,7 +194,7 @@
                 $select.setValue($select.settings.value);
             }
             if ($select.settings.onChange) {
-                $select.$control.on('change', $select.settings.onChange);
+                $select.$control.off('change').on('change', $select.settings.onChange);
             }
         };
 

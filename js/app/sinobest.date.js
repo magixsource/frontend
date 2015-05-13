@@ -97,7 +97,7 @@
             if (settings.value) {
                 $date.setValue(settings.value);
             }
-            $date.on('click', function () {
+            $date.off('click').on('click', function () {
                 var initJson = {
                     skin:settings.skin,
                     firstDayOfWeek:settings.firstDayOfWeek,
