@@ -1,6 +1,6 @@
 .sinobest-areaselect {
     width: 324px;
-    float: left;
+    /*float: left;*/
     color: #666666;
     font: 12px/150% Arial, Verdana, "宋体";
 }
@@ -23,10 +23,12 @@
 .sinobest-areaselect .areaselect-dropdown {
     display: none;
     position: relative;
-    float: left;
+    /*float: left;*/
     z-index: 2;
+    left: -179px;
+    top: -4px;
     height: 26px;
-    margin-right: 6px
+    /*margin-right: 6px*/
 }
 
 .areaselect-dropdown a:hover {
@@ -118,7 +120,7 @@
     width: 7px;
     height: 5px;
     overflow: hidden;
-    background: url(img/20130606B.png) no-repeat -76px -34px;
+    background: url("../img/20130606B.png") no-repeat -76px -34px;
     opacity: .5;
     filter: alpha(opacity=50)
 }
@@ -158,12 +160,12 @@
     /*display: none;*/
     position: absolute;
     z-index: 2;
-    top: 15px;
-    left: 400px;
+    top: -8px;
+    left: 397px;
     cursor: pointer;
     width: 17px;
     height: 17px;
-    background: url("img/20120418.png") no-repeat -40px 0;
+    background: url("../img/20120418.png") no-repeat -40px 0;
 }
 
 .areaselect-input {
@@ -184,7 +186,7 @@
     cursor: pointer;
     width: 17px;
     height: 22px;
-    background: url("img/right-arrow.png") no-repeat;
+    background: url("../img/right-arrow.png") no-repeat;
     /*filter:progid:DXImageTransform.Microsoft.Matrix(M11=0.5,M12=-0.866,M21=0.866,M22=0.5,SizingMethod='auto expand');*/
 }
 
