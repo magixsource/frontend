@@ -21,6 +21,7 @@
 }
 
 .sinobest-areaselect .areaselect-dropdown {
+    display: none;
     position: relative;
     float: left;
     z-index: 2;
@@ -35,7 +36,7 @@
 }
 
 .areaselect-dropdown .areaselect-dropdown-content {
-    display: none;
+    /*display: none;*/
     position: absolute;
     top: 21px;
     left: 6px;
@@ -154,7 +155,7 @@
 }
 
 .areaselect-dropdown .areaselect-dropdown-close {
-    display: none;
+    /*display: none;*/
     position: absolute;
     z-index: 2;
     top: 15px;
@@ -163,4 +164,30 @@
     width: 17px;
     height: 17px;
     background: url("img/20120418.png") no-repeat -40px 0;
+}
+
+.areaselect-input {
+
+}
+
+.area-list-content a.selected {
+    background-color: orange;
+    color: white;
+}
+
+.areaselect-dropdown .next-level {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    top: 5px;
+    left: 50px;
+    cursor: pointer;
+    width: 17px;
+    height: 22px;
+    background: url("img/right-arrow.png") no-repeat;
+    /*filter:progid:DXImageTransform.Microsoft.Matrix(M11=0.5,M12=-0.866,M21=0.866,M22=0.5,SizingMethod='auto expand');*/
+}
+
+.area-list-content li {
+    position: relative;
 }
