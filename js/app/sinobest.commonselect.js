@@ -217,7 +217,6 @@
 
                 $(this).addClass('hover');
                 $(this).children('.dropdown-content-item-list').css('display', 'block');
-                //$commonselect.('.commonselect-dropdown').show();
                 $commonselect.$dropdown.show();
             }, function (e) {
                 $(this).removeClass('hover');
@@ -309,7 +308,9 @@
                 });
 
             } else if (level == 2) {
-                html += '<div class="clearfix dropdown-content-item-list"><div class="dropdown-content-item-close">x</div><div class="dropdown-content-subitem">';
+                html += '<div class="clearfix dropdown-content-item-list">' +
+                        //'<div class="dropdown-content-item-close">x</div>'+
+                    '<div class="dropdown-content-subitem">';
                 var tempHtml = "";
                 $.each(array, function () {
                     var item = $(this).attr('item');

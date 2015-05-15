@@ -44,6 +44,7 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
     position: absolute;
     /*top: 19px;*/
     /*left: 6px;*/
+    right:4px;
     border: 1px solid #cecbce;
     /*width: 390px;*/
     /*padding: 7px;*/
