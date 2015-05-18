@@ -224,6 +224,33 @@
                 $commonselect.$dropdown.hide();
             });
 
+            // select
+            $commonselect.find(".dropdown-content-subitem a").off("click").on("click", function () {
+                $(this).toggleClass("selected");
+
+                var text = $(this).text();
+                var value = $commonselect.getValue();
+                if ($(this).hasClass('selected')) {
+                    if (value.length > 0) {
+                        value += "," + text;
+                    } else {
+                        value = text;
+                    }
+                } else {
+                    var str = '';
+                    if (value.indexOf(text + ",") != -1) {
+                        str = text + ',';
+                    } else if (value.indexOf(',' + text) != -1) {
+                        str = ',' + text;
+                    } else {
+                        str = text;
+                    }
+                    value = value.replace(str, '');
+                }
+                $commonselect.setValue(value);
+                //$commonselect.$dropdown.hide();
+            });
+
             // close handle
             $commonselect.find('.dropdown-content-item > .dropdown-content-item-list > .dropdown-content-item-close').click(function () {
                 $(this).parent().parent().removeClass('hover');
