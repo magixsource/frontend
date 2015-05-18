@@ -171,13 +171,24 @@
         function clearCheckbox() {
             $checkbox.html("");
         };
+
+        /**
+         * How to generate a checkbox element id
+         * @param idx
+         * @returns {string}
+         */
+        function generateId(idx) {
+            return $checkbox.settings.name + "_" + idx;
+        }
+
         /**
          * Build Checkbox from data
          * @param data
          */
         function buildCheckbox(data) {
             $.each(data, function (idx, obj) {
-                var checkbox = $('<input type="checkbox" name="' + $checkbox.settings.name + '"> ');
+                var id = generateId(idx);
+                var checkbox = $('<input type="checkbox" name="' + $checkbox.settings.name + '" id="' + id + '"> ');
                 var label = $('<label></label>');
 
                 $.each(obj, function (k, v) {

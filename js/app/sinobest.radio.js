@@ -147,11 +147,19 @@
         }
 
         /**
+         * Id生成策略
+         */
+        function generateId(idx) {
+            return $radio.settings.name + "_" + idx;
+        }
+
+        /**
          * Always build from data
          */
         function buildRadio(data) {
             $.each(data, function (idx, obj) {
-                var radio = $('<input type="radio" name="' + $radio.settings.name + '"> ');
+                var id = generateId(idx);
+                var radio = $('<input type="radio" name="' + $radio.settings.name + '" id="' + id + '"> ');
                 var label = $('<label></label>');
 
                 $.each(obj, function (k, v) {
