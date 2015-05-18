@@ -185,10 +185,10 @@
 
             build();
 
-            var persist = safeSet(settings.persist, true);
-            var create = safeSet(settings.create, false);
-            var createOnBlur = safeSet(settings.createOnBlur, false);
-            var keepTextOnBlur = safeSet(settings.keepTextOnBlur, false);
+            var persist = getOrElse(settings.persist, true);
+            var create = getOrElse(settings.create, false);
+            var createOnBlur = getOrElse(settings.createOnBlur, false);
+            var keepTextOnBlur = getOrElse(settings.keepTextOnBlur, false);
 
             // 声明
             $select = $($bigselect.selector).find('[name="' + settings.name + '"]').selectize({
@@ -231,7 +231,7 @@
          * @param d
          * @return {*}
          */
-        function safeSet(v, d) {
+        function getOrElse(v, d) {
             if (!v) {
                 return d;
             }
