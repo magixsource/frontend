@@ -4114,15 +4114,6 @@
 			};
 		})();
 
-		//this.refreshState = (function(){
-		//	var original = self.refreshState;
-		//	return function(){
-		//		original.apply(this, arguments);
-        //
-		//
-        //
-		//	};
-		//})();
 	});
 
 	return Selectize;
