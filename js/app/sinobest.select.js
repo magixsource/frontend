@@ -3,21 +3,21 @@
  */
 (function ($) {
     var defaults = {
-        className:"sinobest-select", //CSS类名
-        required:false, // 是否必录
-        disabled:false,
-        allowEmptyOption:true,
-        name:null,
-        id:null,
-        valueField:"code",
-        labelField:"detail",
-        value:"",
-        data:null,
-        url:null,
-        multiple:false,
-        size:null,
-        onChange:null,
-        callback:null // 验证方法回调
+        className: "sinobest-select", //CSS类名
+        required: false, // 是否必录
+        disabled: false,
+        allowEmptyOption: true,
+        name: null,
+        id: null,
+        valueField: "code",
+        labelField: "detail",
+        value: "",
+        data: null,
+        url: null,
+        multiple: false,
+        size: null,
+        onChange: null,
+        callback: null // 验证方法回调
     };
 
     $.fn.sbselect = function (options) {
@@ -41,7 +41,7 @@
         $select.setValue = function (value) {
             $select.$control.val(value);
             // disabled Hack
-            if($select.settings.disabled && ($select.settings.multiple || $select.settings.size)){
+            if ($select.settings.disabled && ($select.settings.multiple || $select.settings.size)) {
                 // option.addClass('option-selected');
                 $select.$control.find("option").not(":selected").removeClass("option-selected");
                 $select.$control.find("option:selected").addClass("option-selected");
@@ -79,9 +79,9 @@
                             $select.settings.required = v;
                         } else if (k == 'disabled') {
                             $select.settings.disabled = v;
-                            if(v){
+                            if (v) {
                                 toggleDisabledClass(true);
-                            }else{
+                            } else {
                                 toggleDisabledClass(false);
                             }
                         }
@@ -126,7 +126,7 @@
          * Destroy select
          */
         $select.destroy = function () {
-            return  $select.remove();
+            return $select.remove();
         };
 
         /**
@@ -153,10 +153,10 @@
         /**
          * enabled or disabled class
          */
-        function toggleDisabledClass(flag){
-            if(flag){
+        function toggleDisabledClass(flag) {
+            if (flag) {
                 $select.$control.addClass('select-disabled');
-            }else{
+            } else {
                 $select.$control.removeClass('select-disabled');
             }
         }
@@ -171,11 +171,16 @@
             $.each(data, function (idx, obj) {
                 var option = $("<option></option>");
                 $.each(obj, function (k, v) {
+                    var isAttr = true;
                     if (k == $select.settings.valueField) {
                         option.val(v);
-                    } else if (k == $select.settings.labelField) {
+                        isAttr = false;
+                    }
+                    if (k == $select.settings.labelField) {
                         option.text(v);
-                    } else {
+                        isAttr = false;
+                    }
+                    if (isAttr) {
                         option.attr(k, v);
                     }
                 });
@@ -208,8 +213,8 @@
         function render() {
             if ($select.settings.multiple) {
                 $select.html('<select multiple></select>');
-                if($select.settings.size){
-                    $select.find("select").attr("size",$select.settings.size);
+                if ($select.settings.size) {
+                    $select.find("select").attr("size", $select.settings.size);
                 }
             } else {
                 $select.html('<select></select>');
@@ -238,16 +243,17 @@
                 buildOption($select.settings.data);
             } else {
                 // same as getJSON
-                $.ajax({type:"get",
-                    contentType:"application/json; charset=utf-8",
-                    dataType:"json",
-                    url:$select.settings.url,
-                    success:function (data) {
+                $.ajax({
+                    type: "get",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    url: $select.settings.url,
+                    success: function (data) {
                         $select.settings.data = data;
                         clearOption();
                         buildOption($select.settings.data);
                     },
-                    error:function (XMLHttpRequest, textStatus, errorThrown) {
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
                         var e = new Object();
                         e.code = XMLHttpRequest.status;
                         e.msg = $.sberror.format(e.code, this.url);
