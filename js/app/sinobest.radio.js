@@ -163,11 +163,16 @@
                 var label = $('<label></label>');
 
                 $.each(obj, function (k, v) {
+                    var isAttr = true;
                     if (k == $radio.settings.valueField) {
                         radio.val(v);
-                    } else if (k == $radio.settings.labelField) {
+                        isAttr = false;
+                    }
+                    if (k == $radio.settings.labelField) {
                         label.text(v);
-                    } else {
+                        isAttr = false;
+                    }
+                    if (isAttr) {
                         radio.attr(k, v);
                     }
                 });
