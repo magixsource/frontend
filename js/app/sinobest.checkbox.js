@@ -192,11 +192,16 @@
                 var label = $('<label></label>');
 
                 $.each(obj, function (k, v) {
+                    var isAttr = true;
                     if (k == $checkbox.settings.valueField) {
                         checkbox.val(v);
-                    } else if (k == $checkbox.settings.labelField) {
+                        isAttr = false;
+                    }
+                    if (k == $checkbox.settings.labelField) {
                         label.text(v);
-                    } else {
+                        isAttr = false;
+                    }
+                    if (isAttr) {
                         checkbox.attr(k, v);
                     }
                 });
