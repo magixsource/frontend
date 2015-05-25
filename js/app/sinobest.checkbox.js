@@ -189,7 +189,7 @@
             $.each(data, function (idx, obj) {
                 var id = generateId(idx);
                 var checkbox = $('<input type="checkbox" name="' + $checkbox.settings.name + '" id="' + id + '"> ');
-                var label = $('<label></label>');
+                var label = $('<label for="'+id+'"></label>');
 
                 $.each(obj, function (k, v) {
                     var isAttr = true;
