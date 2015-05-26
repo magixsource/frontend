@@ -1,20 +1,20 @@
 (function ($) {
     var defaults = {
-        className:"sinobest-daterange", //CSS类名
-        required:false, // 是否必录
-        readonly:false,
-        beginMinDate:null,
-        beginMaxDate:null,
-        endMinDate:null,
-        endMaxDate:null,
-        name:"",
-        id:"",
-        delimiter:null,
-        beginSuffix:"_begin",
-        endSuffix:"_end",
-        callback:null,
-        toChar:"\u81f3", // 至
-        value:[]//数组，有顺序
+        className: "sinobest-daterange", //CSS类名
+        required: false, // 是否必录
+        readonly: false,
+        beginMinDate: null,
+        beginMaxDate: null,
+        endMinDate: null,
+        endMaxDate: null,
+        name: "",
+        id: "",
+        delimiter: null,
+        beginSuffix: "_begin",
+        endSuffix: "_end",
+        callback: null,
+        toChar: "\u81f3", // 至
+        value: []//数组，有顺序
     };
 
     $.fn.sbdaterange = function (options) {
@@ -125,8 +125,16 @@
         function buildInput() {
             var beginName = $daterange.settings.name + $daterange.settings.beginSuffix;
             var endName = $daterange.settings.name + $daterange.settings.endSuffix;
-            var beginId = beginName;
-            var endId = endName;
+            var beginId;
+            var endId;
+            if ($daterange.settings.id) {
+                beginId = $daterange.settings.id + $daterange.settings.beginSuffix;
+                endId = $daterange.settings.id + $daterange.settings.endSuffix;
+            } else {
+                beginId = beginName;
+                endId = endName;
+            }
+
             var $container = $('<input type="text" name="' + beginName + '" id="' + beginId + '">' + $daterange.settings.toChar + '<input type="text" name="' + endName + '" id="' + endId + '">');
             $daterange.append($container);
         };
@@ -157,26 +165,26 @@
             $daterange.find("input").each(function (idx) {
                 if (idx == 0) {
                     // 覆盖value
-                    var beginSettings = $.extend({}, $daterange.settings, {value:$daterange.settings.value[idx]});
+                    var beginSettings = $.extend({}, $daterange.settings, {value: $daterange.settings.value[idx]});
 
                     if (settings.beginMinDate) {
-                        beginSettings = $.extend({}, beginSettings, {minDate:settings.beginMinDate});
+                        beginSettings = $.extend({}, beginSettings, {minDate: settings.beginMinDate});
                     }
                     if (settings.beginMaxDate) {
-                        beginSettings = $.extend({}, beginSettings, {maxDate:settings.beginMaxDate});
+                        beginSettings = $.extend({}, beginSettings, {maxDate: settings.beginMaxDate});
                     }
                     $daterange.$begin = $(this).sbdate(beginSettings);
                     beginId = $(this).attr('id');
                 } else {
-                    var endSettings = $.extend({}, $daterange.settings, {value:$daterange.settings.value[idx]});
+                    var endSettings = $.extend({}, $daterange.settings, {value: $daterange.settings.value[idx]});
 
                     if (settings.endMinDate) {
-                        endSettings = $.extend({}, endSettings, {minDate:settings.endMinDate});
+                        endSettings = $.extend({}, endSettings, {minDate: settings.endMinDate});
                     } else {
-                        endSettings = $.extend({}, endSettings, {minDate:"#F{$dp.$D(\'" + beginId + "\')}"});
+                        endSettings = $.extend({}, endSettings, {minDate: "#F{$dp.$D(\'" + beginId + "\')}"});
                     }
                     if (settings.endMaxDate) {
-                        endSettings = $.extend({}, endSettings, {maxDate:settings.endMaxDate});
+                        endSettings = $.extend({}, endSettings, {maxDate: settings.endMaxDate});
                     }
                     $daterange.$end = $(this).sbdate(endSettings);
                 }
