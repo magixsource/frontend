@@ -172,6 +172,9 @@
                     }
                     if (settings.beginMaxDate) {
                         beginSettings = $.extend({}, beginSettings, {maxDate: settings.beginMaxDate});
+                    }else{
+                        var endId = $daterange.find("input").eq(1).attr('id');
+                        beginSettings = $.extend({}, beginSettings, {maxDate: "#F{$dp.$D(\'"+endId+"\')}"});
                     }
                     $daterange.$begin = $(this).sbdate(beginSettings);
                     beginId = $(this).attr('id');
