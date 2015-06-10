@@ -10,9 +10,26 @@
     };
 
     $.fn.sbbutton = function (options) {
-        var settings = $.extend({}, defaults, options || {});
+        var settings;
         var $input = this;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
         $input.settings = settings;
+
+        function getter() {
+            return $input.data("$input");
+        }
+
+        function setter() {
+            $input.data("$input", $input);
+        }
 
         /**
          * Get value
@@ -100,7 +117,16 @@
             if ($input.settings.onClick) {
                 $input.off('click').on("click", $input.settings.onClick);
             }
+            setter();
             return $input;
+        }
+
+        /**
+         * Check is containe by jquery.data
+         * @returns {*}
+         */
+        function isContain() {
+            return $input.data("$input");
         }
 
         /**

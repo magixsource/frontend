@@ -3,14 +3,31 @@
  */
 (function ($) {
     var defaults = {
-        className:"sinobest-hidden", //CSS类名
-        value:""
+        className: "sinobest-hidden", //CSS类名
+        value: ""
     };
 
     $.fn.sbhidden = function (options) {
-        var settings = $.extend({}, defaults, options || {});
         var $input = this;
+        var settings;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
         $input.settings = settings;
+
+        function getter() {
+            return $input.data("$input");
+        }
+
+        function setter() {
+            $input.data("$input", $input);
+        }
 
         /**
          * Get value
@@ -76,7 +93,7 @@
          * Destroy
          */
         $input.destroy = function () {
-            return  $input.remove();
+            return $input.remove();
         };
 
         /**
@@ -88,7 +105,16 @@
             if ($input.settings.value) {
                 $input.val($input.settings.value);
             }
+            setter();
             return $input;
+        }
+
+        /**
+         * Check is containe by jquery.data
+         * @returns {*}
+         */
+        function isContain() {
+            return $input.data("$input");
         }
 
         /**
