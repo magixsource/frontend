@@ -16,9 +16,30 @@
     };
 
     $.fn.sbcheckbox = function (options) {
-        var settings = $.extend({}, defaults, options || {});
+        var settings;
         var $checkbox = this;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
         $checkbox.settings = settings;
+
+        function getter() {
+            return $checkbox.data("$checkbox");
+        }
+
+        function setter() {
+            $checkbox.data("$checkbox", $checkbox);
+        }
+
+        function isContain() {
+            return $checkbox.data("$checkbox");
+        }
 
         /**
          * Get checkbox value
@@ -60,6 +81,10 @@
          * @return {*}
          */
         $checkbox.setValue = function (v) {
+            if (!$checkbox.settings.data) {
+                $checkbox.data('$temp', v);
+                return $checkbox;
+            }
             $checkbox.find(":checkbox").filter(':checked').prop('checked', false);
 
             if (!$.isArray(v)) {
@@ -189,7 +214,7 @@
             $.each(data, function (idx, obj) {
                 var id = generateId(idx);
                 var checkbox = $('<input type="checkbox" name="' + $checkbox.settings.name + '" id="' + id + '"> ');
-                var label = $('<label for="'+id+'"></label>');
+                var label = $('<label for="' + id + '"></label>');
 
                 $.each(obj, function (k, v) {
                     var isAttr = true;
@@ -217,6 +242,10 @@
             addEventListener();
         };
         function addEventListener() {
+            if ($checkbox.data('$temp')) {
+                $checkbox.setValue($checkbox.data('$temp'));
+                $checkbox.removeData('$temp');
+            }
             // 初始值问题
             if (settings.value) {
                 // checked
@@ -266,6 +295,7 @@
                 clearCheckbox();
                 buildCheckbox($checkbox.settings.data);
             }
+            setter();
         }
 
         function tableRadio() {
@@ -275,11 +305,12 @@
             }
             $div.wrapAll("<table><tbody></tbody></table>");
             var last;
+
             $div.each(function (idx) {
                 if (idx % settings.columnCount == 0) {
                     last = $(this).wrap("<tr><td></td></tr>");
                 } else {
-                    $(this).insertAfter(last.parent("td")).wrap("<td></td>");
+                    last = $(this).insertAfter(last.parent("td")).wrap("<td></td>");
                 }
             });
         }

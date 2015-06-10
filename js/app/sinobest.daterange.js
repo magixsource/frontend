@@ -18,9 +18,31 @@
     };
 
     $.fn.sbdaterange = function (options) {
-        var settings = $.extend({}, defaults, options || {});
+        var settings;
         var $daterange = this;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
+
         $daterange.settings = settings;
+
+        function getter() {
+            return $daterange.data("$daterange");
+        }
+
+        function setter() {
+            $daterange.data("$daterange", $daterange);
+        }
+
+        function isContain() {
+            return $daterange.data("$daterange");
+        }
 
         /**
          * Get value
@@ -172,9 +194,9 @@
                     }
                     if (settings.beginMaxDate) {
                         beginSettings = $.extend({}, beginSettings, {maxDate: settings.beginMaxDate});
-                    }else{
+                    } else {
                         var endId = $daterange.find("input").eq(1).attr('id');
-                        beginSettings = $.extend({}, beginSettings, {maxDate: "#F{$dp.$D(\'"+endId+"\')}"});
+                        beginSettings = $.extend({}, beginSettings, {maxDate: "#F{$dp.$D(\'" + endId + "\')}"});
                     }
                     $daterange.$begin = $(this).sbdate(beginSettings);
                     beginId = $(this).attr('id');
@@ -192,6 +214,8 @@
                     $daterange.$end = $(this).sbdate(endSettings);
                 }
             });
+
+            setter();
         }
 
         render();

@@ -18,9 +18,35 @@
     };
 
     $.fn.sbradio = function (options) {
-        var settings = $.extend({}, defaults, options || {});
         var $radio = this;
+        var settings;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
+
         $radio.settings = settings;
+
+        function getter() {
+            return $radio.data("$radio");
+        }
+
+        function setter() {
+            $radio.data("$radio", $radio);
+        }
+
+        /**
+         * Check is containe by jquery.data
+         * @returns {*}
+         */
+        function isContain() {
+            return $radio.data("$radio");
+        }
 
         /**
          * Get Value
@@ -36,6 +62,11 @@
          * @return {*}
          */
         $radio.setValue = function (v) {
+            if (!$radio.settings.data) {
+                $radio.data('$temp', v);
+                return $radio;
+            }
+
             $radio.find(":radio").filter(':checked').prop('checked', false);
             if (v) {
                 $radio.find(":radio").filter('[value=' + v + ']').prop('checked', true);
@@ -160,7 +191,7 @@
             $.each(data, function (idx, obj) {
                 var id = generateId(idx);
                 var radio = $('<input type="radio" name="' + $radio.settings.name + '" id="' + id + '"> ');
-                var label = $('<label for="'+id+'"></label>');
+                var label = $('<label for="' + id + '"></label>');
 
                 $.each(obj, function (k, v) {
                     var isAttr = true;
@@ -193,6 +224,10 @@
          * Init value or event
          */
         function addEventListener() {
+            if ($radio.data('$temp')) {
+                $radio.setValue($radio.data('$temp'));
+                $radio.removeData('$temp');
+            }
             // 初始值问题
             if (settings.value) {
                 // checked
@@ -253,6 +288,7 @@
                 clearRadio();
                 buildRadio($radio.settings.data);
             }
+            setter();
         }
 
         /**
@@ -266,10 +302,11 @@
             $div.wrapAll("<table><tbody></tbody></table>");
             var last;
             $div.each(function (idx) {
+
                 if (idx % settings.columnCount == 0) {
                     last = $(this).wrap("<tr><td></td></tr>");
                 } else {
-                    $(this).insertAfter(last.parent("td")).wrap("<td></td>");
+                    last = $(this).insertAfter(last.parent("td")).wrap("<td></td>");
                 }
             });
         }
