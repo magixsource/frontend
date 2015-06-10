@@ -21,9 +21,34 @@
     };
 
     $.fn.sbselect = function (options) {
-        var settings = $.extend({}, defaults, options || {});
+        var settings;
         var $select = this;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
         $select.settings = settings;
+
+        function getter() {
+            return $select.data("$select");
+        }
+
+        function setter() {
+            $select.data("$select", $select);
+        }
+
+        /**
+         * Check is containe by jquery.data
+         * @returns {*}
+         */
+        function isContain() {
+            return $select.data("$select");
+        }
 
         /**
          * Get value
@@ -39,13 +64,21 @@
          * @return object
          */
         $select.setValue = function (value) {
+            // 异步请求中，如果请求未结束，将value存储于内存中，请求结束后从内存中读值
+            if (!$select.settings.data) {
+                $select.data('$temp', value);
+                return $select;
+            }
+
             $select.$control.val(value);
+
             // disabled Hack
             if ($select.settings.disabled && ($select.settings.multiple || $select.settings.size)) {
                 // option.addClass('option-selected');
                 $select.$control.find("option").not(":selected").removeClass("option-selected");
                 $select.$control.find("option:selected").addClass("option-selected");
             }
+
             return $select;
         };
 
@@ -198,6 +231,11 @@
             if ($select.settings.value) {
                 $select.setValue($select.settings.value);
             }
+            // 从内存中获取未赋的值
+            if ($select.data('$temp')) {
+                $select.setValue($select.data('$temp'));
+                $select.removeData('$temp');
+            }
             if ($select.settings.onChange) {
                 $select.$control.off('change').on('change', $select.settings.onChange);
             }
@@ -263,7 +301,7 @@
                 });
             }
 
-
+            setter();
             return $select;
         }
 
