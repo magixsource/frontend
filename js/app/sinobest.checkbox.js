@@ -16,9 +16,30 @@
     };
 
     $.fn.sbcheckbox = function (options) {
-        var settings = $.extend({}, defaults, options || {});
+        var settings;
         var $checkbox = this;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
         $checkbox.settings = settings;
+
+        function getter() {
+            return $checkbox.data("$checkbox");
+        }
+
+        function setter() {
+            $checkbox.data("$checkbox", $checkbox);
+        }
+
+        function isContain() {
+            return $checkbox.data("$checkbox");
+        }
 
         /**
          * Get checkbox value
@@ -60,6 +81,10 @@
          * @return {*}
          */
         $checkbox.setValue = function (v) {
+            if (!$checkbox.settings.data) {
+                $checkbox.data('$temp', v);
+                return $checkbox;
+            }
             $checkbox.find(":checkbox").filter(':checked').prop('checked', false);
 
             if (!$.isArray(v)) {
@@ -171,21 +196,37 @@
         function clearCheckbox() {
             $checkbox.html("");
         };
+
+        /**
+         * How to generate a checkbox element id
+         * @param idx
+         * @returns {string}
+         */
+        function generateId(idx) {
+            return $checkbox.settings.name + "_" + idx;
+        }
+
         /**
          * Build Checkbox from data
          * @param data
          */
         function buildCheckbox(data) {
             $.each(data, function (idx, obj) {
-                var checkbox = $('<input type="checkbox" name="' + $checkbox.settings.name + '"> ');
-                var label = $('<label></label>');
+                var id = generateId(idx);
+                var checkbox = $('<input type="checkbox" name="' + $checkbox.settings.name + '" id="' + id + '"> ');
+                var label = $('<label for="' + id + '"></label>');
 
                 $.each(obj, function (k, v) {
+                    var isAttr = true;
                     if (k == $checkbox.settings.valueField) {
                         checkbox.val(v);
-                    } else if (k == $checkbox.settings.labelField) {
+                        isAttr = false;
+                    }
+                    if (k == $checkbox.settings.labelField) {
                         label.text(v);
-                    } else {
+                        isAttr = false;
+                    }
+                    if (isAttr) {
                         checkbox.attr(k, v);
                     }
                 });
@@ -201,6 +242,10 @@
             addEventListener();
         };
         function addEventListener() {
+            if ($checkbox.data('$temp')) {
+                $checkbox.setValue($checkbox.data('$temp'));
+                $checkbox.removeData('$temp');
+            }
             // 初始值问题
             if (settings.value) {
                 // checked
@@ -250,6 +295,7 @@
                 clearCheckbox();
                 buildCheckbox($checkbox.settings.data);
             }
+            setter();
         }
 
         function tableRadio() {
@@ -259,11 +305,12 @@
             }
             $div.wrapAll("<table><tbody></tbody></table>");
             var last;
+
             $div.each(function (idx) {
                 if (idx % settings.columnCount == 0) {
                     last = $(this).wrap("<tr><td></td></tr>");
                 } else {
-                    $(this).insertAfter(last.parent("td")).wrap("<td></td>");
+                    last = $(this).insertAfter(last.parent("td")).wrap("<td></td>");
                 }
             });
         }

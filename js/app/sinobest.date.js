@@ -19,9 +19,30 @@
     };
 
     $.fn.sbdate = function (options) {
-        var settings = $.extend({}, defaults, options || {});
+        var settings;
         var $date = this;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
         $date.settings = settings;
+
+        function getter() {
+            return $date.data("$date");
+        }
+
+        function setter() {
+            $date.data("$date", $date);
+        }
+
+        function isContain() {
+            return $date.data("$date");
+        }
 
         $date.getValue = function () {
             return $date.val();
@@ -97,7 +118,7 @@
             if (settings.value) {
                 $date.setValue(settings.value);
             }
-            $date.on('click', function () {
+            $date.off('click').on('click', function () {
                 var initJson = {
                     skin:settings.skin,
                     firstDayOfWeek:settings.firstDayOfWeek,
@@ -122,6 +143,7 @@
 
                 WdatePicker(initJson);
             });
+            setter();
         }
 
         function getAttributes() {

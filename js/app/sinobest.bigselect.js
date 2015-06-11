@@ -22,7 +22,9 @@
         name: "",
         id: "",
         callback: null,
-        value: null
+        value: null,
+        onAjaxRequest: null,//ajax请求数据回调
+        onAjaxResponse: null//ajax响应数据回调
     };
 
     $.fn.sbbigselect = function (options) {
@@ -176,7 +178,9 @@
                 settings.plugins = new Object();
                 settings.plugins['paging_footer'] = {
                     url: settings.url,
-                    pagesize: settings.pageSize
+                    pagesize: settings.pageSize,
+                    onAjaxRequest: settings.onAjaxRequest,
+                    onAjaxResponse: settings.onAjaxResponse
                 };
             }
             if (typeof settings.plugins == 'undefined') {
@@ -185,10 +189,10 @@
 
             build();
 
-            var persist = safeSet(settings.persist, true);
-            var create = safeSet(settings.create, false);
-            var createOnBlur = safeSet(settings.createOnBlur, false);
-            var keepTextOnBlur = safeSet(settings.keepTextOnBlur, false);
+            var persist = getOrElse(settings.persist, true);
+            var create = getOrElse(settings.create, false);
+            var createOnBlur = getOrElse(settings.createOnBlur, false);
+            var keepTextOnBlur = getOrElse(settings.keepTextOnBlur, false);
 
             // 声明
             $select = $($bigselect.selector).find('[name="' + settings.name + '"]').selectize({
@@ -231,7 +235,7 @@
          * @param d
          * @return {*}
          */
-        function safeSet(v, d) {
+        function getOrElse(v, d) {
             if (!v) {
                 return d;
             }
