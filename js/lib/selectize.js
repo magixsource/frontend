@@ -3705,17 +3705,27 @@
             		  return;
             	  }
                   $.support.cors = true;
+
+				  var postData = {
+					  page:self.$pagination.current_page,
+					  pageSize:self.$pagination.page_size,
+					  query:self.$pagination.query,
+					  id:self.$input.context.id
+				  };
+				  // if wanna custom data
+				  if(options.onAjaxRequest && $.isFunction(options.onAjaxRequest)){
+					 postData = (options.onAjaxRequest)(postData);
+				  }
+
                   $.ajax({
                       url: self.$pagination.url,
-                      data:JSON.stringify({
-                    	  page:self.$pagination.current_page,
-                    	  pageSize:self.$pagination.page_size,
-                    	  query:self.$pagination.query,
-                    	  id:self.$input.context.id
-                      }),
+                      data:JSON.stringify(postData),
                       type: 'POST',
                       contentType: "application/json",
                       success: function(res) {
+						  if(options.onAjaxResponse && $.isFunction(options.onAjaxResponse)){
+							  (options.onAjaxResponse)(res);
+						  }
                           // set page information
                           var max_page = Math.ceil(parseInt(res.total)/parseInt(res.pageSize));
                           self.$pagination.max_page = max_page;

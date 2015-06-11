@@ -22,7 +22,9 @@
         name: "",
         id: "",
         callback: null,
-        value: null
+        value: null,
+        onAjaxRequest: null,//ajax请求数据回调
+        onAjaxResponse: null//ajax响应数据回调
     };
 
     $.fn.sbbigselect = function (options) {
@@ -176,7 +178,9 @@
                 settings.plugins = new Object();
                 settings.plugins['paging_footer'] = {
                     url: settings.url,
-                    pagesize: settings.pageSize
+                    pagesize: settings.pageSize,
+                    onAjaxRequest: settings.onAjaxRequest,
+                    onAjaxResponse: settings.onAjaxResponse
                 };
             }
             if (typeof settings.plugins == 'undefined') {
