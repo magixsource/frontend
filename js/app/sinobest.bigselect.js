@@ -28,8 +28,18 @@
     };
 
     $.fn.sbbigselect = function (options) {
-        var settings = $.extend({}, defaults, options || {});
         var $bigselect = this;
+        var settings;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
+
         if (settings.editEnable) {
             // 编辑模式强制saveType为detail
             settings.saveType = "d";
@@ -42,6 +52,18 @@
 
         var $select;
         var control;
+
+        function getter() {
+            return $bigselect.data("$bigselect");
+        }
+
+        function setter() {
+            $bigselect.data("$bigselect", $bigselect);
+        }
+
+        function isContain() {
+            return $bigselect.data("$bigselect");
+        }
 
         $bigselect.getValue = function () {
             return control.getValue();
@@ -227,6 +249,7 @@
 //            if (settings.required) {
 //                $bigselect.attr('required', settings.required);
 //            }
+            setter();
         }
 
         /**
