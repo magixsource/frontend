@@ -17,9 +17,31 @@
     };
 
     $.fn.sbareaselect = function (options) {
-        var settings = $.extend({}, defaults, options || {});
+        var settings;
         var $areaselect = this;
+        if (isContain()) {
+            if (options) {
+                settings = $.extend({}, getter().settings, options || {});
+            } else {
+                return getter();
+            }
+        } else {
+            settings = $.extend({}, defaults, options || {});
+        }
+
         $areaselect.settings = settings;
+
+        function getter() {
+            return $areaselect.data("$areaselect");
+        }
+
+        function setter() {
+            $areaselect.data("$areaselect", $areaselect);
+        }
+
+        function isContain() {
+            return $areaselect.data("$areaselect");
+        }
 
         /**
          * Get text value
@@ -185,24 +207,10 @@
                 $areaselect.$dropdown.show();
             });
 
+            setter();
             return $areaselect;
         }
 
-        function removeCurr() {
-            $areaselect.find(".tab-curr").removeClass("tab-curr");
-        }
-
-        function addCurr($obj) {
-            $obj.addClass('tab-curr');
-        }
-
-        function hideTab(index) {
-            $areaselect.find('.tab-content[data-area=' + index + ']').hide();
-        }
-
-        function showTab(index) {
-            $areaselect.find('.tab-content[data-area=' + index + ']').show();
-        }
 
         function afterBuildDropdown() {
             // set first as current
@@ -253,7 +261,6 @@
                 var value = $(this).prev("a").eq(0).attr('data-value');
                 var text = $(this).prev("a").eq(0).text();
 
-
                 var tabIndex = $(this).parents('.tab-content').eq(0).attr('data-area');
                 tabIndex = parseInt(tabIndex);
                 // refresh title
@@ -264,13 +271,14 @@
                 // show target
                 var targetIndex = tabIndex + 1;
                 // refresh area-list content before show it
-                refreshAreaList(targetIndex, value);
 
+                refreshAreaList(targetIndex, value);
                 showTab(targetIndex);
                 addCurr($areaselect.find('.dropdown-content-tab li[data-index=' + targetIndex + ']'));
             });
 
         }
+
 
         /**
          * Refresh tab text
@@ -294,19 +302,17 @@
          * Get level data,Should support ajax lazy data and already load data
          * @param level
          */
-        function getDataByParent(pid) {
+        function getDataByParent(pid, json) {
             var array = new Array();
-            if ($areaselect.settings.ajaxMode) {
-                // Yep,ajax mode
-            } else {
-                $.each($areaselect.settings.data, function (idx) {
-                    var p = $(this).attr('parent');
-                    if (p == pid) {
-                        array.push($(this));
-                    }
-                });
-            }
+
+            $.each(json, function (idx) {
+                var p = $(this).attr('parent');
+                if (p == pid) {
+                    array.push($(this));
+                }
+            });
             return array;
+
         }
 
         /**
@@ -315,7 +321,8 @@
         function buildDropdown() {
             // validate data
             var maxLevel = 1;
-            $.each($areaselect.settings.data, function (idx) {
+
+            $.each(($areaselect.settings.data || {}), function (idx) {
                 var level = $(this).attr('level');
                 maxLevel = Math.max(maxLevel, level);
             });
@@ -333,16 +340,7 @@
             }
             $areaselect.$dropdownTabs.append($tabHeader);
 
-            // build tabs-body
-            for (var i = 0; i < $areaselect.settings.level; i++) {
-                var $body = $('<div class="tab-content" data-area="' + i + '"><ul class="area-list-content"></ul></div>');
-                if (i == 0) {
-                    var html = buildAreaList(i, $areaselect.settings.rootId);
-                    $body.find('ul.area-list-content').append($(html));
-                }
-                $areaselect.$dropdownTabs.append($body);
-            }
-
+            buildTabContent();
 
             // add tabs
             $areaselect.$dropdownContent.append($areaselect.$dropdownTabs);
@@ -353,21 +351,92 @@
             $areaselect.append($areaselect.$dropdown);
         }
 
+        function ajaxLoad(postData, callback, args) {
+            $.ajax({
+                url: $areaselect.settings.url,
+                data: postData,//JSON.stringify(postData),
+                type: 'get',
+                contentType: "application/json",
+                success: function (res) {
+                    args.push(res);
+                    callback.apply(this, args);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    var e = new Object();
+                    e.code = XMLHttpRequest.status;
+                    e.msg = $.sberror.format(e.code, this.url);
+                    // 根据规范要求将错误交给全局函数处理
+                    $.sberror.onError(e);
+                }
+            });
+        }
+
+        /**
+         * 构建Tab内容,两种，一种是同步模式，直接读取settings.data；另一种是异步，通过ajax回调刷新构建
+         */
+        function buildTabContent() {
+            if ($areaselect.settings.data) {
+                buildTabContentFrom($areaselect.settings.data);
+            } else {
+                var postData = {"pid": $areaselect.settings.rootId};
+                ajaxLoad(postData, buildTabContentFrom, new Array());
+            }
+
+        }
+
+        /**
+         * 根据Json数据来构建内容
+         * @param json
+         */
+        function buildTabContentFrom(json) {
+            for (var i = 0; i < $areaselect.settings.level; i++) {
+                var $body = $('<div class="tab-content" data-area="' + i + '"><ul class="area-list-content"></ul></div>');
+                if (i == 0) {
+                    var html = buildAreaList(i, $areaselect.settings.rootId, json);
+                    $body.find('ul.area-list-content').append($(html));
+                }
+                $areaselect.$dropdownTabs.append($body);
+            }
+        }
+
         /**
          * Build Area-list content
          * @param level which level
          * @param rootId
          * @returns {string}
          */
-        function buildAreaList(level, rootId) {
-            var subData = getDataByParent(rootId);
+        function buildAreaList(level, rootId, json) {
+            var data;
+            if ($areaselect.settings.data) {
+                data = getDataByParent(rootId, $areaselect.settings.data);
+            } else {
+                // ajax has already load first level data
+                data = json;
+            }
+
             var html = "";
-            $.each(subData, function () {
-                html += '<li><a href="###" data-value="' + $(this).attr('code') + '">' + $(this).attr('detail') + '</a><div class="next-level"></div></li>';
+            $.each(data, function () {
+                // 最后一层不显示 next-level
+                if (level + 1 < $areaselect.settings.level) {
+                    html += '<li><a href="###" data-value="' + $(this).attr('code') + '">' + $(this).attr('detail') + '</a><div class="next-level"></div></li>';
+                } else {
+                    html += '<li><a href="###" data-value="' + $(this).attr('code') + '">' + $(this).attr('detail') + '</a></li>';
+                }
             });
             return html;
         }
 
+        /**
+         * 重建Tab内容
+         * @param currentLevel
+         * @param rootId
+         * @param json
+         */
+        function rebuildTabContent(currentLevel, rootId, json) {
+            var $container = $areaselect.find('.tab-content[data-area=' + currentLevel + '] ul.area-list-content');
+            var html = buildAreaList(currentLevel, rootId, json);
+            $container.html(html);
+        }
 
         /**
          * Refresh Area-list content
@@ -376,15 +445,18 @@
          */
         function refreshAreaList(level, rootId) {
             var currentLevel = parseInt(level);
-            // clear
-            var $container = $areaselect.find('.tab-content[data-area=' + currentLevel + '] ul.area-list-content');
-            //rebuild
-            var html = "";
-            if (rootId) {
-                html = buildAreaList(currentLevel, rootId);
-            }
-            $container.html(html);
 
+            if (rootId) {// 是否存在下层节点标志
+                if ($areaselect.settings.data) {
+                    rebuildTabContent(currentLevel, rootId, $areaselect.settings.data);
+                } else {
+                    var postData = {pid: rootId};
+                    var args = new Array();
+                    args.push(currentLevel);
+                    args.push(rootId);
+                    ajaxLoad(postData, rebuildTabContent, args);
+                }
+            }
             // Next level handle
             currentLevel = currentLevel + 1;
             var nextLevel = $areaselect.find('.tab-content[data-area=' + currentLevel + '] ul.area-list-content');
@@ -422,6 +494,22 @@
 
         function isPlaceHolderSupported() {
             return ('placeholder' in document.createElement('input'));
+        }
+
+        function removeCurr() {
+            $areaselect.find(".tab-curr").removeClass("tab-curr");
+        }
+
+        function addCurr($obj) {
+            $obj.addClass('tab-curr');
+        }
+
+        function hideTab(index) {
+            $areaselect.find('.tab-content[data-area=' + index + ']').hide();
+        }
+
+        function showTab(index) {
+            $areaselect.find('.tab-content[data-area=' + index + ']').show();
         }
 
         /**
