@@ -1,0 +1,66 @@
+.sinobest-wizard {
+
+}
+
+.sinobest-wizard fieldset {
+    border: none;
+    width: 320px;
+}
+
+.sinobest-wizard legend {
+    font-size: 18px;
+    margin: 0px;
+    padding: 10px 0px;
+    color: #b0232a;
+    font-weight: bold;
+}
+
+.sinobest-wizard label {
+    display: block;
+    margin: 15px 0 5px;
+}
+
+.sinobest-wizard .prev, .sinobest-wizard .next {
+    background-color: #b0232a;
+    padding: 5px 10px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.sinobest-wizard .prev:hover, .sinobest-wizard .next:hover {
+    background-color: #000;
+    text-decoration: none;
+}
+
+.sinobest-wizard .prev {
+    float: left;
+}
+
+.sinobest-wizard .next {
+    float: right;
+}
+
+.steps {
+    list-style: none;
+    width: 100%;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+}
+
+.steps li {
+    font-size: 24px;
+    float: left;
+    padding: 10px;
+    color: #b0b1b3;
+    cursor: pointer;
+}
+
+.steps li span {
+    font-size: 11px;
+    display: block;
+}
+
+.steps li.current {
+    color: #000;
+}
