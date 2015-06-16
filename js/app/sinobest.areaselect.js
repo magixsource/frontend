@@ -355,6 +355,12 @@
             $areaselect.append($areaselect.$dropdown);
         }
 
+        /**
+         * Ajax load data
+         * @param postData
+         * @param callback
+         * @param args
+         */
         function ajaxLoad(postData, callback, args) {
             $.ajax({
                 url: $areaselect.settings.url,
