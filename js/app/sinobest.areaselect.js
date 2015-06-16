@@ -15,7 +15,9 @@
         level: 3,
         value: "",
         beforeSend: null,
-        complete: null
+        complete: null,
+        valueField: "code",
+        labelField: "detail"
     };
 
     $.fn.sbareaselect = function (options) {
@@ -433,9 +435,9 @@
             $.each(data, function () {
                 // 最后一层不显示 next-level
                 if (level + 1 < $areaselect.settings.level) {
-                    html += '<li><a href="###" data-value="' + $(this).attr('code') + '">' + $(this).attr('detail') + '</a><div class="next-level"></div></li>';
+                    html += '<li><a href="###" data-value="' + $(this).attr($areaselect.settings.valueField) + '">' + $(this).attr($areaselect.settings.labelField) + '</a><div class="next-level"></div></li>';
                 } else {
-                    html += '<li><a href="###" data-value="' + $(this).attr('code') + '">' + $(this).attr('detail') + '</a></li>';
+                    html += '<li><a href="###" data-value="' + $(this).attr($areaselect.settings.valueField) + '">' + $(this).attr($areaselect.settings.labelField) + '</a></li>';
                 }
             });
             return html;
