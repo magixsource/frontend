@@ -13,7 +13,9 @@
         url: null,// ajax异步请求数据
         rootId: null,//数据的根节点id
         level: 3,
-        value: ""
+        value: "",
+        beforeSend: null,
+        complete: null
     };
 
     $.fn.sbareaselect = function (options) {
@@ -354,9 +356,22 @@
         function ajaxLoad(postData, callback, args) {
             $.ajax({
                 url: $areaselect.settings.url,
-                data: postData,//JSON.stringify(postData),
-                type: 'get',
+                data: JSON.stringify(postData),//JSON.stringify(postData),
+                type: 'POST',
                 contentType: "application/json",
+                beforeSend: function (xhr) {
+                    if ($areaselect.settings.beforeSend) {
+                        $areaselect.settings.beforeSend.apply(this, xhr);
+                    }
+                },
+                complete: function (XHR, TS) {
+                    if ($areaselect.settings.complete) {
+                        var completeArgs = new Array();
+                        completeArgs.push(XHR);
+                        completeArgs.push(TS);
+                        $areaselect.settings.complete.apply(this, completeArgs);
+                    }
+                },
                 success: function (res) {
                     args.push(res);
                     callback.apply(this, args);
