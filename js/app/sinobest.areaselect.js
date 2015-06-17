@@ -61,7 +61,17 @@
          * @return object
          */
         $areaselect.setValue = function (value) {
-            return $areaselect.$input.val(value);
+            if (value) {
+                // 有效值
+                var array = value.split(",");
+                // 异步去处理
+                $areaselect.data('$temp', array);
+            } else {
+                // 清空值
+                $areaselect.find("a.selected").removeClass('selected');
+            }
+            // 替换值
+            return $areaselect.$input.val(value.replace(/,/g, ''));
         };
         /**
          * Get text state
@@ -248,11 +258,19 @@
                 $areaselect.find('.area-list-content a.selected').removeClass('selected');
                 // 选中
                 $(this).addClass('selected');
-                var text = $(this).text();
-                $areaselect.$input.val(text);
-                // refresh tab title
+
                 var tabIndex = $(this).parents('.tab-content').eq(0).attr('data-area');
                 tabIndex = parseInt(tabIndex);
+
+                var text = $(this).text();
+                var value = text;
+                for (var i = tabIndex - 1; i >= 0; i--) {
+                    var tabText = getTabText(i);
+                    value = tabText + value;
+                }
+                $areaselect.$input.val(value);
+                // refresh tab title
+
                 refreshTabText(tabIndex, text);
                 // close dropdown or not
             }).on('mouseenter', '.area-list-content a', function () {
@@ -281,6 +299,11 @@
                 addCurr($areaselect.find('.dropdown-content-tab li[data-index=' + targetIndex + ']'));
             });
 
+            // clear all
+            $areaselect.find(".clear-all-btn").on("click", function () {
+                $areaselect.setValue("");
+            });
+
         }
 
 
@@ -300,6 +323,16 @@
             if (nextLevel.length > 0) {
                 refreshTabText(nextLevelIndex, null);
             }
+        }
+
+        /**
+         * Get Tab text by level
+         * @param level
+         * @returns {*}
+         */
+        function getTabText(level) {
+            var $container = $areaselect.find('.dropdown-content-tab li[data-index=' + level + ']');
+            return $container.find('em').text();
         }
 
         /**
@@ -342,6 +375,9 @@
                 var $li = $('<li data-index="' + i + '"><a href="###"><em>请选择</em><i></i></a></li>');
                 $tabHeader.append($li);
             }
+            // clearAll link
+            //$tabHeader.append('<input type="button" class="clear-all-btn" value="清空">');
+            $tabHeader.append('<a href="###" class="clear-all-btn">清空</a>');
             $areaselect.$dropdownTabs.append($tabHeader);
 
             buildTabContent();
@@ -420,7 +456,56 @@
                 }
                 $areaselect.$dropdownTabs.append($body);
             }
+
+            if ($areaselect.data('$temp')) {
+                var array = $areaselect.data('$temp');
+                for (var i = 0; i < $areaselect.settings.level; i++) {
+
+                    var item = array[i];
+                    var length = $areaselect.find('.tab-content[data-area=' + i + '] a').length;
+                    if (length) {
+                        proxyClick(i, item);
+                    } else {
+                        // proxy click
+                        if (i < $areaselect.settings.level - 1) {
+                            $areaselect.data('$proxy' + i, "proxyClick(" + i + ",'" + item + "');");
+                        } else {
+                            $areaselect.data('$proxy' + i, "proxySelect(" + i + ",'" + item + "');");
+                        }
+
+                    }
+
+                }
+            }
+
         }
+
+        /**
+         * 代理Next-Level点击,通常在异步请求数据成功后点击
+         * @param i
+         * @param item
+         */
+        function proxyClick(i, item) {
+            $areaselect.find('.tab-content[data-area=' + i + '] a').each(function () {
+                if ($(this).text() == item) {
+                    $(this).parent().find('.next-level').click();
+                }
+            });
+        }
+
+        /**
+         * 代理Items选中，通常在异步请求数据成功后选中
+         * @param i
+         * @param item
+         */
+        function proxySelect(i, item) {
+            $areaselect.find('.tab-content[data-area=' + i + '] a').each(function () {
+                if ($(this).text() == item) {
+                    $(this).click();
+                }
+            });
+        }
+
 
         /**
          * Build Area-list content
@@ -459,6 +544,14 @@
             var $container = $areaselect.find('.tab-content[data-area=' + currentLevel + '] ul.area-list-content');
             var html = buildAreaList(currentLevel, rootId, json);
             $container.html(html);
+
+            if ($areaselect.data('$proxy' + currentLevel)) {
+                eval($areaselect.data('$proxy' + currentLevel));
+                $areaselect.removeData('$proxy' + currentLevel);
+                if (currentLevel == $areaselect.settings.level - 1) {
+                    $areaselect.removeData('$temp');
+                }
+            }
         }
 
         /**
